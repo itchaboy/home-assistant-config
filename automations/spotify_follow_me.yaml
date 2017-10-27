@@ -1,0 +1,178 @@
+- alias: Spotify follow to Living Room
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.last_room_with_motion
+      to: 'Living Room'
+  condition:
+    - condition: state
+      entity_id: input_boolean.follow_me
+      state: 'on'
+  action:
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.spotify
+        source: Living Room
+
+- alias: Spotify follow to Kitchen
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.last_room_with_motion
+      to: 'Kitchen'
+  condition:
+    - condition: state
+      entity_id: input_boolean.follow_me
+      state: 'on'
+  action:
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.spotify
+        source: Kitchen
+
+- alias: Spotify follow to Master Bedroom
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.last_room_with_motion
+      to: 'Master Bedroom'
+  condition:
+    - condition: state
+      entity_id: input_boolean.follow_me
+      state: 'on'
+  action:
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.spotify
+        source: Bedroom
+
+- alias: Spotify follow to Master Bathroom
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.last_room_with_motion
+      to: 'Master Bathroom'
+  condition:
+    - condition: state
+      entity_id: input_boolean.follow_me
+      state: 'on'
+  action:
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.spotify
+        source: Bathroom
+
+###### TURN ON AND OFF FOLLOW ME MODE
+- alias: turn on follow me upon coming home - derek
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.dereks_phone
+      to: 'home'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.kalee_nolan
+        state: 'not_home'
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: 'off'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.follow_me
+
+- alias: turn on follow me when everyone else leaves - derek
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.kalee_nolan
+      to: 'not_home'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.dereks_phone
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: 'off'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.follow_me
+
+- alias: turn on follow me upon coming home - kalee
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.kalees_phone
+      to: 'home'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.derek_nolan
+        state: 'not_home'
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: 'off'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.follow_me
+
+- alias: turn on follow me when everyone else leaves - kalee
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.derek_nolan
+      to: 'not_home'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.kalees_phone
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: 'off'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.follow_me
+
+- alias: turn off follow me - derek
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.kalee_nolan
+      to: 'home'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.dereks_phone
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.follow_me
+        state: 'on'
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.follow_me
+
+- alias: turn off follow me - kalee
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.derek_nolan
+      to: 'home'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: device_tracker.kalees_phone
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.follow_me
+        state: 'on'
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.follow_me

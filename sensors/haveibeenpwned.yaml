@@ -1,0 +1,6 @@
+  - platform: haveibeenpwned
+    email:
+      - !secret dereks_email
+      - !secret kalees_email
+      - !secret nolans_email
+      - !secret mindys_email

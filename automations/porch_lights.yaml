@@ -1,0 +1,68 @@
+- alias: 'Turn OFF/ON porch lights'
+  initial_state: 'on'
+  trigger:
+    - platform: sun
+      event: sunrise
+    - platform: sun
+      event: sunset
+  action:
+    - service_template: >
+        {% if trigger.event == 'sunrise' %} light.turn_off
+        {% endif %}
+      entity_id: light.porch_lights
+      data:
+        transition: 1
+    - service_template: >
+        {% if trigger.event == 'sunset' %} light.turn_on
+        {% endif %}
+      entity_id: light.porch_lights
+      data:
+        brightness_pct: 50
+        transition: 1
+
+- alias: Porch Lights - Movie Mode On
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.lighting_mode
+      to: 'Movie'
+  condition:
+    - condition: state
+      entity_id: light.porch_lights
+      state: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.porch_lights
+      data:
+        transition: 5
+        brightness_pct: 10
+
+- alias: Porch Lights - Movie Mode Off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.lighting_mode
+      from: 'Movie'
+      to: 'Bright'
+    - platform: state
+      entity_id: input_select.lighting_mode
+      from: 'Movie'
+      to: 'Medium'
+    - platform: state
+      entity_id: input_select.lighting_mode
+      from: 'Movie'
+      to: 'Dim'
+    - platform: state
+      entity_id: input_select.lighting_mode
+      from: 'Movie'
+      to: 'Lights Off'
+  condition:
+    - condition: state
+      entity_id: light.porch_lights
+      state: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.porch_lights
+      data:
+        transition: 5
+        brightness_pct: 50

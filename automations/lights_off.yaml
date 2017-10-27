@@ -1,0 +1,85 @@
+- alias: No motion for 8 minutes - Lights Off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.living_area_motion_sensor
+      to: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.people
+        state: 'home'
+      - condition: state
+        entity_id: sensor.tv_usage
+        state: 'Off'
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: input_select.lighting_mode
+            state: 'Dim'
+          - condition: state
+            entity_id: input_select.lighting_mode
+            state: 'Medium'
+          - condition: state
+            entity_id: input_select.lighting_mode
+            state: 'Bright'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.lights_off_transition
+    - delay: '00:02:00'
+    - wait_template: "{{ states.input_select.lighting_mode.state == 'Lights Off' }}"
+      timeout: '00:1:00'
+    - service: scene.turn_on
+      entity_id: scene.lights_off
+
+# LIVING AREA MOTION ON
+- alias: Living Area Motion Boolean - On
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.sn3_kitchen_pir
+        - sensor.sn2_livingroom_bar_pir
+        - sensor.sn5_livingroom_couch_pir 
+      to: 'motion detected'
+  condition:
+    - condition: state
+      entity_id: input_boolean.living_area_motion_sensor
+      state: 'off'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.living_area_motion_sensor
+# LIVING AREA MOTION OFF
+- alias: Living Area Motion Boolean - Off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.sn3_kitchen_pir
+        - sensor.sn2_livingroom_bar_pir
+        - sensor.sn5_livingroom_couch_pir 
+      to: 'standby'
+      for:
+        minutes: 8
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: sensor.sn3_kitchen_pir
+        state: 'standby'
+        for:
+          minutes: 8
+      - condition: state
+        entity_id: sensor.sn2_livingroom_bar_pir
+        state: 'standby'
+        for:
+          minutes: 8
+      - condition: state
+        entity_id: sensor.sn5_livingroom_couch_pir
+        state: 'standby'
+        for:
+          minutes: 8
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.living_area_motion_sensor

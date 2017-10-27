@@ -1,0 +1,62 @@
+# http://beautyinthebackcountry.com/2013/04/09/uv-index-and-spf-explained/
+  - platform: template
+    sensors:
+      burn_time_derek:
+        friendly_name: "Burn Time: Derek"
+        unit_of_measurement: Minutes
+        value_template: >
+          {% if states.sensor.pws_uv.state|int <= 0 %} ∞
+          {% else %}
+            {{ (200 / states.sensor.pws_uv.state|float)|round }}
+          {% endif %}
+        icon_template: >
+          {% if states.sensor.pws_uv.state|int <= 0 %} mdi:weather-cloudy
+          {% else %} mdi:fire
+          {% endif %}
+
+  - platform: template
+    sensors:
+      burn_time_kalee:
+        friendly_name: "Burn Time: Kalee"
+        unit_of_measurement: Minutes
+        value_template: >
+          {% if states.sensor.pws_uv.state|int <= 0 %} ∞
+          {% else %}
+            {{ (100 / states.sensor.pws_uv.state|float)|round }}
+          {% endif %}
+        icon_template: >
+          {% if states.sensor.pws_uv.state|int <= 0 %} mdi:weather-cloudy
+          {% else %} mdi:fire
+          {% endif %}
+
+  - platform: template
+    sensors:
+      uv_category:
+        entity_id: sensor.pws_uv
+        friendly_name: UV Category
+        value_template: >
+          {% if states.sensor.pws_uv.state|int >= 11 %} Extreme
+          {% elif states.sensor.pws_uv.state|int >= 8 %} Very High
+          {% elif states.sensor.pws_uv.state|int >= 6 %} High
+          {% elif states.sensor.pws_uv.state|int >= 3 %} Moderate
+          {% elif states.sensor.pws_uv.state|int >= 1 %} Low
+          {% elif states.sensor.pws_uv.state|int >= 0 %} No Risk
+          {% endif %}
+
+# Skin Type 1 (Scandanavian/Celtic) = 67min
+# - Never tans, always burns easily, skin particularly light, freckles, redish hair. (All babies and children)
+
+# Skin Type 2 (Caucasians) = 100min
+# - Skin somehow darker than Type1, freckles rare, tans slightly, high inclination to sunburn.
+
+# Skin Type 3 (Central Europe) = 200min
+# - Skin light/light brown, no freckles, good tanning ability, very low inclination to sunburn.
+
+# Skin Type 4 (South Mediteranean/South American) = 300min
+# - Skin Light-brown to olive, no freckles, very good tanning ability, very low inclination to sunburn.
+
+# Skin Type 5 (Middle Eastern/Asia/some hispanics and Afro-American) = 400min
+# - Skin olive in color, sun insensitive skin, very low inclinatiion to sunburn.
+
+# Skin Type 6 (African/Afro-American) = 500min
+# - Skin deeply pigmented, sun insensitive skin, never burns.

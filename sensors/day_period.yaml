@@ -1,0 +1,19 @@
+  - platform: template
+    sensors:
+      day_period:
+        friendly_name: Day Period
+        entity_id: input_select.day_period
+        value_template: >
+          {% if is_state("input_select.day_period", "Morning") %} Morning
+          {% elif is_state("input_select.day_period", "Afternoon") %} Afternoon
+          {% elif is_state("input_select.day_period", "Evening") %} Evening
+          {% elif is_state("input_select.day_period", "Night") %} Night
+          {% elif is_state("input_select.day_period", "Midnight") %} Midnight
+          {% endif %}
+        icon_template: >
+          {% if is_state("input_select.day_period", "Morning") %} mdi:weather-sunset-up
+          {% elif is_state("input_select.day_period", "Afternoon") %} mdi:weather-sunny
+          {% elif is_state("input_select.day_period", "Evening") %} mdi:weather-sunset
+          {% elif is_state("input_select.day_period", "Night") %} mdi:weather-night
+          {% elif is_state("input_select.day_period", "Midnight") %} mdi:weather-night
+          {% endif %}

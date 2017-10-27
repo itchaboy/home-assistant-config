@@ -1,0 +1,59 @@
+  - platform: darksky
+    api_key: !secret darksky_api_key
+    monitored_conditions:
+      - summary
+      - icon
+      - nearest_storm_distance
+      - nearest_storm_bearing
+      - precip_type
+      - precip_intensity
+      - precip_probability
+      - temperature
+      - apparent_temperature
+      - wind_speed
+      - cloud_cover
+      - humidity
+      - pressure
+      - visibility
+      - ozone
+      - minutely_summary
+      - hourly_summary
+      - daily_summary
+      - temperature_max
+      - temperature_min
+      - precip_intensity_max
+
+  - platform: wunderground
+    api_key: !secret wunderground_api_key
+    monitored_conditions:
+      - alerts
+      - UV
+      - solarradiation
+      - heat_index_f
+      - wind_dir
+      - wind_gust_1d_mph # Max for the day
+      - wind_1d_mph
+      - pressure_trend
+      - precip_1d # Forecasted precipitation probability in %
+      - precip_1d_in # Forecasted precipitation intensity in inches
+
+  - platform: template
+    sensors:
+      ecobee_operation_mode:
+        entity_id: climate.thermostat
+        value_template: '{{ states.climate.thermostat.attributes.operation_mode }}'
+
+      ecobee_operation:
+        friendly_name: Operation
+        entity_id: climate.thermostat
+        value_template: '{{ states.climate.thermostat.attributes.operation }}'
+        icon_template: >
+          {% if is_state("sensor.ecobee_operation", "heat") %} mdi:fire
+          {% elif is_state("sensor.ecobee_operation", "cool") %} mdi:snowflake
+          {% elif is_state("sensor.ecobee_operation", "fan") %} mdi:fan
+          {% elif is_state("sensor.ecobee_operation", "idle") %} mdi:fan-off
+          {% endif %}
+
+      ecobee_away_mode:
+        entity_id: climate.thermostat
+        value_template: '{{ states.climate.thermostat.attributes.away_mode }}'

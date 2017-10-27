@@ -1,0 +1,11 @@
+  - platform: steam_online
+    api_key: !secret steam_api_key
+    accounts:
+      - !secret dereks_steam_account
+
+  - platform: template
+    sensors:
+      steam_game:
+        friendly_name: "Current Steam Game"
+        value_template: !secret steam_game_template
+        entity_id: !secret steam_game_entity_id

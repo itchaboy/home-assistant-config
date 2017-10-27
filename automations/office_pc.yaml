@@ -1,0 +1,147 @@
+- alias: PC On in the afternoon - Lights Bright
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: switch.office_pc
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Bright'
+  action:
+    - service: light.turn_on
+      entity_id: light.office_light
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_temp: 200
+    - service: switch.turn_on
+      entity_id: switch.desk_lamp_switch
+
+- alias: PC On in the evening - Lights Medium
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: switch.office_pc
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Medium'
+  action:
+    - service: light.turn_on
+      entity_id: light.office_light
+      data:
+        transition: 5
+        brightness_pct: 70
+        color_temp: 300
+    - service: switch.turn_on
+      entity_id: switch.desk_lamp_switch
+
+- alias: PC On at night - Lights Dim
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: switch.office_pc
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Dim'
+  action:
+    - service: light.turn_on
+      entity_id: light.office_light
+      data:
+        transition: 5
+        brightness_pct: 40
+        color_temp: 500
+
+
+
+
+
+
+- alias: PC Already On - Bright
+  trigger:
+    - platform: state
+      entity_id: input_select.lighting_mode
+      to: 'Bright'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: switch.office_pc
+        state: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.office_light
+      data:
+        transition: 5
+        brightness_pct: 100
+        color_temp: 200
+    - service: switch.turn_on
+      entity_id: switch.desk_lamp_switch
+
+- alias: PC Already On - Medium
+  trigger:
+    - platform: state
+      entity_id: input_select.lighting_mode
+      to: 'Medium'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: switch.office_pc
+        state: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.office_light
+      data:
+        transition: 5
+        brightness_pct: 70
+        color_temp: 300
+    - service: switch.turn_on
+      entity_id: switch.desk_lamp_switch
+
+- alias: PC Already On - Dim
+  trigger:
+    - platform: state
+      entity_id: input_select.lighting_mode
+      to: 'Dim'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: switch.office_pc
+        state: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.office_light
+      data:
+        transition: 5
+        brightness_pct: 40
+        color_temp: 300
+
+
+
+
+
+
+- alias: PC Off - Office Lights Off
+  trigger:
+    - platform: state
+      entity_id: switch.office_pc
+      to: 'off'
+  action:
+    - service: light.turn_off
+      entity_id: light.office_light
+      data:
+        transition: 10
+    - service: switch.turn_off
+      entity_id: switch.desk_lamp_switch

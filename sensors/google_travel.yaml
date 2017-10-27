@@ -1,0 +1,11 @@
+  - platform: google_travel_time
+    api_key: !secret google_travel_api_key
+    name: To LaFontaine
+    origin: !secret home_address
+    destination: !secret kalees_work_address
+
+  - platform: google_travel_time
+    api_key: !secret google_travel_api_key
+    name: To Huf
+    origin: !secret home_address
+    destination: !secret dereks_work_address

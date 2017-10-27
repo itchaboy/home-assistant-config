@@ -1,0 +1,74 @@
+# BRIGHT
+- alias: Lights On Bright - Arriving Home
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.people
+      to: 'home'
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.indoor_light_level
+        below: '10'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Afternoon'
+  action:
+    - wait_template: "{{ states.binary_sensor.front_door_sensor_sensor.state == 'on' }}"
+      timeout: '00:30:00'
+    - service: scene.turn_on
+      entity_id: scene.bright
+    - delay: '00:00:05'
+    - service: scene.turn_on
+      entity_id: scene.bright
+
+# MEDIUM
+- alias: Lights On Medium - Arriving Home
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.people
+      to: 'home'
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.indoor_light_level
+        below: '10'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Evening'
+  action:
+    - wait_template: "{{ states.binary_sensor.front_door_sensor_sensor.state == 'on' }}"
+      timeout: '00:30:00'
+    - service: scene.turn_on
+      entity_id: scene.medium
+    - delay: '00:00:05'
+    - service: scene.turn_on
+      entity_id: scene.medium
+
+# DIM
+- alias: Lights On Dim - Arriving Home
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.people
+      to: 'home'
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.indoor_light_level
+        below: '10'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Night'
+  action:
+    - wait_template: "{{ states.binary_sensor.front_door_sensor_sensor.state == 'on' }}"
+      timeout: '00:30:00'
+    - service: scene.turn_on
+      entity_id: scene.dim
+    - delay: '00:00:05'
+    - service: scene.turn_on
+      entity_id: scene.dim

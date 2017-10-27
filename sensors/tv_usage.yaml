@@ -1,0 +1,9 @@
+  - platform: template
+    sensors:
+      tv_usage:
+        friendly_name: "TV Usage"
+        value_template: >
+          {% if (is_state("media_player.amazon_fire_tv", "playing") or is_state("media_player.amazon_fire_tv", "paused")) or (states.switch.tv_backlight.state == "on" and states.sensor.steam_game.state != "None") %} On
+          {% else %} Off
+          {% endif %}
+        entity_id: media_player.amazon_fire_tv, sensor.steam_game, switch.tv_backlight

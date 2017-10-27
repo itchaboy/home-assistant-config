@@ -1,0 +1,22 @@
+- alias: Garbage Day Tomorrow Notification
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '19:00:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        weekday: tue
+  action:
+    - service_template: >
+        {% if is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "home") %} notify.household
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.derek_and_kalee
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "home") %} notify.derek_and_nolan
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "home") %} notify.kalee_and_nolan
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.derek
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.kalee
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "home") %} notify.nolan
+        {% endif %}
+      data:
+        message: The garbage will be picked up tomorrow.

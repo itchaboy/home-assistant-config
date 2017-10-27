@@ -1,0 +1,169 @@
+###### START VACUUMING
+- alias: 'Vacuuming - Begin/Resume'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.people
+      to: 'not_home'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        after: '08:00:00'
+        before: '20:00:00'
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+          - sun
+      - condition: state
+        entity_id: input_boolean.vacuum_active
+        state: 'on'
+  action:
+    - service: vacuum.turn_on
+      entity_id: vacuum.xiaomi_vacuum_cleaner
+
+###### PAUSE THE VACUUM UPON ARRIVAL
+- alias: 'Vacuuming - Pause'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.people
+      to: 'home'
+  condition:
+    - condition: state
+      entity_id: sensor.vacuum_status
+      state: 'Cleaning'
+  action:
+    - service: vacuum.start_pause
+      entity_id: vacuum.xiaomi_vacuum_cleaner
+    - wait_template: "{{ states.binary_sensor.front_door_sensor_sensor.state == 'on' }}"
+      timeout: '00:30:00'
+    - delay: '00:00:10'
+    - service: vacuum.locate
+      entity_id: vacuum.xiaomi_vacuum_cleaner
+
+###### LOCATE VACUUM UPON ENTRY
+- alias: Vacuuming - Locate'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.people
+      to: 'home'
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: sensor.vacuum_status
+        state: 'Paused'
+      - condition: state
+        entity_id: sensor.vacuum_status
+        state: 'Charger disconnected'
+  action:
+    - wait_template: "{{ states.binary_sensor.front_door_sensor_sensor.state == 'on' }}"
+      timeout: '00:30:00'
+    - delay: '00:00:10'
+    - service: vacuum.locate
+      entity_id: vacuum.xiaomi_vacuum_cleaner
+
+
+###### VACUUM PAUSED FOR TOO LONG
+- alias: 'Vacuuming - Return to Base at 8pm'
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '20:00:00'
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: sensor.vacuum_status
+        state: 'Paused'
+      - condition: state
+        entity_id: sensor.vacuum_status
+        state: 'Charger disconnected'
+  action:
+    - service: vacuum.return_to_base
+      entity_id: vacuum.xiaomi_vacuum_cleaner
+
+###### VACUUMING DONE
+- alias: 'Vacuuming - Done'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.vacuum_status
+      to: 'Charging'
+  condition:
+    - condition: template
+      value_template: '{{ states.sensor.vacuum_cleaned_area.state|float > 60 }}'
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.vacuum_active
+    - service: persistent_notification.create
+      data:
+        title: "Vacuuming Complete"
+        message: "Check the bin today, it may need to be emptied"
+        notification_id: 2245
+    - service: persistent_notification.dismiss
+      data:
+        notification_id: 0002
+
+###### DAILY VACUUM RESET
+- alias: 'Vacuum - Daily Reset'
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '05:00:00'
+  condition:
+    - condition: state
+      entity_id: group.people
+      state: 'home'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.vacuum_active
+
+###### HOUSE IS GETTING DIRTY
+- alias: Vacuuming - Off for 3 days or more
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: vacuum.xiaomi_vacuum_cleaner
+      to: 'off'
+      for:
+        hours: 36
+  action:
+    - service: persistent_notification.create
+      data:
+        title: "Vacuum"
+        message: "The house hasn't been vacuumed in 3 days. Conisder leaving the house?"
+        notification_id: 0002
+
+###### NOTIFICATIONS
+- alias: Vacuum notifications
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.vacuum_status
+      to: 'Cleaning'
+    - platform: state
+      entity_id: sensor.vacuum_status
+      to: 'Paused'
+    - platform: state
+      entity_id: sensor.vacuum_status
+      to: 'Charging'
+  condition:
+    - condition: state
+      entity_id: group.people
+      state: 'not_home'
+  action:
+    - service: notify.derek
+      data_template:
+        message: >
+          {% if trigger.to_state.state == 'Cleaning' %} The vacuum has started.
+          {% elif trigger.to_state.state == 'Paused' %} The vacuum has paused.
+          {% elif trigger.to_state.state == 'Error' %} The vacuum has encountered an error.
+          {% elif trigger.to_state.state == 'Charging' %} The vacuum has returned to the dock.
+          {% endif %}

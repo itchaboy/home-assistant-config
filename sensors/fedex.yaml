@@ -1,0 +1,5 @@
+  - platform: fedex
+    username: !secret fedex_user
+    password: !secret fedex_pass
+#    update_interval:
+#      minutes: 10

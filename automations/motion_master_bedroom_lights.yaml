@@ -1,0 +1,190 @@
+- alias: Master Bedroom Motion - Morning # 6AM - 11AM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn1_bedroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Morning'
+      - condition: state
+        entity_id: light.bedroom_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'on'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bedroom_lights
+      data:
+        transition: 1
+        brightness: 200
+
+- alias: Master Bedroom Motion - Afternoon # 11AM - 7PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn1_bedroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Afternoon'
+      - condition: state
+        entity_id: light.bedroom_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'on'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bedroom_lights
+      data:
+        transition: 1
+        brightness: 255
+
+- alias: Master Bedroom Motion - Evening  # 7PM - 9PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn1_bedroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Evening'
+      - condition: state
+        entity_id: light.bedroom_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'on'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bedroom_lights
+      data:
+        transition: 1
+        brightness: 150
+
+- alias: Master Bedroom Motion - Night # 9PM - 11PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn1_bedroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Night'
+      - condition: state
+        entity_id: light.bedroom_lamps
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'on'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bedroom_lamps
+      data:
+        transition: 1
+        brightness: 50
+        color_temp: 500
+
+- alias: Master Bedroom Motion - Movie Mode
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn1_bedroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: light.bedroom_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Movie'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.bedroom_lamps
+      data:
+        transition: 1
+        brightness: 100
+        color_temp: 500
+
+- alias: Master Bedroom Motion - Off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn1_bedroom_pir
+      to: 'standby'
+      for:
+        minutes: 3
+  condition:
+    - condition: state
+      entity_id: input_boolean.study_mode
+      state: 'off'
+  action:
+    - service: light.turn_off
+      entity_id:
+        - light.bedroom_lights
+        - light.bedroom_lamps
+      data:
+        transition: 10
+
+- alias: Turn off Master Bedroom Motion in the morning if kalee/derek are home
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '05:59:00'
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: device_tracker.kalees_phone
+        state: 'home'
+      - condition: state
+        entity_id: device_tracker.dereks_phone
+        state: 'home'
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.master_bedroom_motion
+
+- alias: mirror lights turn on bedroom motion boolean
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: switch.mirror_lights_switch
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.day_period.state == 'Morning' or states.input_select.day_period.state == 'Afternoon' or states.input_select.day_period.state == 'Evening' }}"
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.master_bedroom_motion

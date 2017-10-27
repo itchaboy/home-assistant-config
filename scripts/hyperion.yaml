@@ -1,0 +1,13 @@
+hyperion_off:
+  alias: "Hyperion Off"
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.hyperion
+        rgb_color: [0,0,0]
+
+hyperion_on:
+  alias: Hyperion On
+  sequence:
+    - service: light.turn_off
+      entity_id: light.hyperion

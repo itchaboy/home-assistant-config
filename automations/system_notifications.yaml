@@ -1,0 +1,80 @@
+- alias: Notify - IP Change
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.ipchange
+      from: 'False'
+      to: 'True'
+  action:
+    - service: notify.derek
+      data_template:
+        message: " IP Change Detected! New IP: {{ states('sensor.exteral_ip') }} Change bookmarks accordingly."
+
+- alias: "Send notification upon failed login attempt"
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: persistent_notification.httplogin
+  condition:
+    - condition: template
+      value_template: "{{ trigger.to_state.state != off }}"
+  action:
+    - service: notify.derek
+      data_template:
+        message: "Failed Home Assistant login attempt! {{ trigger.to_state.state }}"
+        data_template:
+          url: http://www.ip-tracker.org/locator/ip-lookup.php?ip={{ states.persistent_notification.httplogin.state.split ("from ") [1]}}
+
+- alias: Notify - System Started
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    - service: notify.derek
+      data:
+        message: Home Assistant has started!
+
+- alias: Notify - System Shutdown
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: shutdown
+  action:
+    - service: notify.derek
+      data:
+        message: Home Assistant has shutdown!
+
+- alias: Household power has gone offline
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: switch.plex_server
+      to: 'off'
+      for:
+        minutes: 2
+  action:
+    - service: notify.household
+      data:
+        message: "The house has lost power!...probably. For details: http://dteenergy.com/map/outage.html"
+    - service: persistent_notification.create
+      data:
+        title: "Power Outage"
+        message: "The power is still offline. Check http://dteenergy.com/map/outage.html"
+        notification_id: 4758
+
+- alias: Household power has come back online
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: switch.plex_server
+      to: 'on'
+      for:
+        seconds: 30
+  action:
+    - service: notify.household
+      data:
+        message: The power has been restored at home.
+    - service: persistent_notification.dismiss
+      data:
+        notification_id: 4758

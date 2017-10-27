@@ -1,0 +1,20 @@
+- name: Bright
+  entities:
+    input_select.lighting_mode:
+      option: Bright
+    light.dining_room_lights:
+      state: on
+      brightness_pct: 100
+      transition: 5
+    light.door_light:
+      state: on
+      brightness_pct: 100
+      transition: 5
+    light.bar_light:
+      state: on
+      brightness_pct: 100
+      transition: 5
+    light.living_room_lights:
+      state: on
+      brightness_pct: 100
+      transition: 5

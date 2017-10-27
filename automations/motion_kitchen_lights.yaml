@@ -1,0 +1,259 @@
+- alias: Kitchen Motion - Morning Dim # 6AM - 11AM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Morning'
+      - condition: state
+        entity_id: switch.cabinet_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.sink_light
+      data:
+        transition: 1
+        brightness_pct: 20
+    - service: light.turn_on
+      entity_id: light.stove_light
+      data:
+        transition: 1
+        brightness_pct: 80
+    - service: switch.turn_on
+      entity_id: switch.cabinet_lights
+
+- alias: Kitchen Motion - Morning Bright # 6AM - 11AM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Morning'
+      - condition: state
+        entity_id: switch.cabinet_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'on'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.sink_light
+      data:
+        transition: 1
+        brightness_pct: 60
+    - service: light.turn_on
+      entity_id: light.stove_light
+      data:
+        transition: 1
+        brightness_pct: 100
+    - service: light.turn_on
+      entity_id: light.kitchen_lights_level
+      data:
+        transition: 1
+        brightness_pct: 30
+    - service: switch.turn_on
+      entity_id: switch.cabinet_lights
+
+- alias: Kitchen Motion - Afternoon # 11AM - 7PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Afternoon'
+      - condition: state
+        entity_id: switch.cabinet_lights
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.sink_light
+      data:
+        transition: 1
+        brightness_pct: 100
+    - service: light.turn_on
+      entity_id: light.stove_light
+      data:
+        transition: 1
+        brightness_pct: 100
+    - service: light.turn_on
+      entity_id: light.kitchen_lights_level
+      data:
+        brightness_pct: 100
+    - service: switch.turn_on
+      entity_id: switch.cabinet_lights
+
+- alias: Kitchen Motion - Evening # 7PM - 9PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Evening'
+      - condition: state
+        entity_id: switch.cabinet_lights
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.sink_light
+      data:
+        transition: 1
+        brightness_pct: 70
+    - service: light.turn_on
+      entity_id: light.stove_light
+      data:
+        transition: 1
+        brightness_pct: 100
+    - service: switch.turn_on
+      entity_id: switch.cabinet_lights
+
+- alias: Kitchen Motion - Night - Lights Dim # 9PM - 11PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Night'
+      - condition: state
+        entity_id: switch.cabinet_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Dim'
+  action:
+    - service: light.turn_on
+      entity_id: light.sink_light
+      data:
+        transition: 1
+        brightness_pct: 40
+    - service: light.turn_on
+      entity_id: light.stove_light
+      data:
+        transition: 1
+        brightness_pct: 70
+    - service: switch.turn_on
+      entity_id: switch.cabinet_lights
+
+- alias: Kitchen Motion - Night - Lights Off # 9PM - 11PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Night'
+      - condition: state
+        entity_id: switch.cabinet_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Lights Off'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.cabinet_lights
+
+- alias: Kitchen Motion - Midnight # 11PM - 6AM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Midnight'
+      - condition: state
+        entity_id: switch.cabinet_lights
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state == 'Dim' or states.input_select.lighting_mode.state == 'Medium' or states.input_select.lighting_mode.state == 'Bright' or states.input_select.lighting_mode.state == 'Lights Off' or states.input_select.lighting_mode.state == 'No Ones Home' }}"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.cabinet_lights
+
+- alias: Kitchen Motion - Movie Mode
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: switch.cabinet_lights
+        state: 'off'
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Movie'
+  action:
+    - service: light.turn_on
+      entity_id: light.sink_light
+      data:
+        transition: 1
+        brightness_pct: 40
+    - service: switch.turn_on
+      entity_id: switch.cabinet_lights
+
+- alias: Kitchen Motion - Off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'standby'
+      for:
+        minutes: 3
+  action:
+    - service: light.turn_off
+      entity_id: light.sink_light
+      data:
+        transition: 10
+    - service: light.turn_off
+      entity_id: light.stove_light
+      data:
+        transition: 10
+    - service: light.turn_off
+      entity_id: light.kitchen_lights_level
+    - service: switch.turn_off
+      entity_id: switch.cabinet_lights

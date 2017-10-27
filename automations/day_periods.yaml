@@ -1,0 +1,131 @@
+- alias: Day Period - Morning # 6AM - 11AM
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '06:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Morning'
+
+- alias: Day Period - Afternoon # 11AM - 7PM
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '11:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Afternoon'
+
+- alias: Day Period - Evening # 7PM - 9PM
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '19:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Evening'
+
+- alias: Day Period - Night # 9PM - 11PM
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '21:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Night'
+
+- alias: Day Period - Midnight # 11PM - 6AM
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '23:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Midnight'
+
+
+# SYSTEM START
+- alias: Day Period - Morning - HA start # 6AM - 11AM
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: start
+  condition:
+    - condition: time
+      after: '06:00:00'
+      before: '11:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Morning'
+
+- alias: Day Period - Afternoon - HA start # 11AM - 7PM
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: start
+  condition:
+    - condition: time
+      after: '11:00:00'
+      before: '19:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Afternoon'
+
+- alias: Day Period - Evening - HA start # 7PM - 9PM
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: start
+  condition:
+    - condition: time
+      after: '19:00:00'
+      before: '21:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Evening'
+
+- alias: Day Period - Night - HA start # 9PM - 11PM
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: start
+  condition:
+    - condition: time
+      after: '21:00:00'
+      before: '23:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Night'
+
+- alias: Day Period - Midnight - HA start # 11PM - 6AM
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: start
+  condition:
+    - condition: time
+      after: '23:00:00'
+      before: '06:00:00'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.day_period
+      data:
+        option: 'Midnight'

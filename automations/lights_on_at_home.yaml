@@ -1,0 +1,177 @@
+# BRIGHT IF ALREADY HOME
+- alias: Lights On Bright - Already Home
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.living_area_motion_sensor
+      to: 'on'
+    - platform: numeric_state
+      entity_id: sensor.indoor_brightness
+      below: '10'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.people
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.living_area_motion_sensor
+        state: 'on'
+      - condition: numeric_state
+        entity_id: sensor.indoor_brightness
+        below: '10'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Afternoon'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: scene.turn_on
+      entity_id: scene.bright
+    - delay: '00:00:05'
+    - service: scene.turn_on
+      entity_id: scene.bright
+# MEDIUM IF ALREADY HOME
+- alias: Lights On Medium - Already Home
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.living_area_motion_sensor
+      to: 'on'
+    - platform: numeric_state
+      entity_id: sensor.indoor_brightness
+      below: '10'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.people
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.living_area_motion_sensor
+        state: 'on'
+      - condition: numeric_state
+        entity_id: sensor.indoor_brightness
+        below: '10'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Evening'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: scene.turn_on
+      entity_id: scene.medium
+    - delay: '00:00:05'
+    - service: scene.turn_on
+      entity_id: scene.medium
+# DIM IF ALREADY HOME
+- alias: Lights On Dim - Already Home
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.living_area_motion_sensor
+      to: 'on'
+    - platform: numeric_state
+      entity_id: sensor.indoor_brightness
+      below: '10'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.people
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.living_area_motion_sensor
+        state: 'on'
+      - condition: numeric_state
+        entity_id: sensor.indoor_brightness
+        below: '10'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Night'
+      - condition: state
+        entity_id: input_boolean.in_bed
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: scene.turn_on
+      entity_id: scene.dim
+    - delay: '00:02:00'
+    - service: scene.turn_on
+      entity_id: scene.dim
+
+
+
+
+# BRIGHT --> MEDIUM
+- alias: Lights On from Bright to Medium
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.day_period
+      to: 'Evening'
+  condition:
+    - condition: state
+      entity_id: input_select.lighting_mode
+      state: 'Bright'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.medium_transition
+    - delay: '00:02:00'
+    - wait_template: "{{ states.input_select.lighting_mode.state == 'Medium' }}"
+      timeout: '00:1:00'
+    - service: scene.turn_on
+      entity_id: scene.medium
+# MEDIUM --> DIM
+- alias: Lights On from Medium to Dim
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.day_period
+      to: 'Night'
+  condition:
+    - condition: state
+      entity_id: input_select.lighting_mode
+      state: 'Medium'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.dim_transition
+    - delay: '00:02:00'
+    - wait_template: "{{ states.input_select.lighting_mode.state == 'Dim' }}"
+      timeout: '00:1:00'
+    - service: scene.turn_on
+      entity_id: scene.dim
+
+
+
+
+# LIGHTS ON DIM IN THE MORNING
+- alias: Motion in the morning turn on lights dim
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.living_area_motion_sensor
+      to: 'on'
+    - platform: time
+      at: '06:00:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Morning'
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      - condition: state
+        entity_id: input_boolean.living_area_motion_sensor
+        state: 'on'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.dim_transition
+    - delay: '00:02:00'
+    - wait_template: "{{ states.input_select.lighting_mode.state == 'Dim' }}"
+      timeout: '00:1:00'
+    - service: scene.turn_on
+      entity_id: scene.dim

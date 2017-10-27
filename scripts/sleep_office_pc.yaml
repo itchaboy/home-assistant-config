@@ -1,0 +1,4 @@
+sleep_office_pc:
+  alias: Put office PC to sleep
+  sequence:
+    - service: shell_command.sleep_pc

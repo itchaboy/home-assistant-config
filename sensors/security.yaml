@@ -1,0 +1,38 @@
+  - platform: template
+    sensors:
+      front_door:
+        friendly_name: Front Door
+        entity_id: binary_sensor.front_door_sensor_sensor
+        value_template: >
+          {% if is_state("binary_sensor.front_door_sensor_sensor", "off") %} Closed
+          {% else %} Open
+          {% endif %}
+
+  - platform: template
+    sensors:
+      office_window:
+        friendly_name: Office Window
+        entity_id: sensor.office_window_sensor_alarm_level
+        value_template: >
+          {% if is_state("sensor.office_window_sensor_alarm_level", "0") %} Closed
+          {% else %} Open
+          {% endif %}
+        icon_template: >
+          {% if is_state("sensor.office_window_sensor_alarm_level", "0") %} mdi:window-closed
+          {% else %} mdi:window-open
+          {% endif %}
+
+
+  - platform: template
+    sensors:
+      home:
+        friendly_name: Home
+        entity_id: group.people
+        value_template: >
+          {% if is_state("group.people", "not_home") %} Unoccupied
+          {% elif is_state("group.people", "home") %} Occupied
+          {% endif %}
+        icon_template: >
+          {% if is_state("group.people", "not_home") %} mdi:home-outline
+          {% elif is_state("group.people", "home") %} mdi:home
+          {% endif %}

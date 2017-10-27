@@ -1,0 +1,66 @@
+lighting_mode:
+  name: Lighting Mode
+  options:
+    - 'Bright'
+    - 'Medium'
+    - 'Dim'
+    - 'Movie'
+    - 'Lights Off'
+  icon: mdi:lightbulb-on-outline
+
+day_period:
+  name: Day Period
+  options:
+    - 'Morning'
+    - 'Afternoon'
+    - 'Evening'
+    - 'Night'
+    - 'Midnight'
+  icon: mdi:theme-light-dark
+
+thermo_hvac:
+  name: HVAC Mode
+  options:
+    - 'Auto'
+    - 'Cool'
+    - 'Heat'
+    - 'Off'
+  icon: mdi:menu
+
+last_room_with_motion:
+  name: Last Room With Motion
+  options:
+    - Living Room
+    - Kitchen
+    - Laundry Room
+    - Master Bedroom
+    - Master Bathroom
+    - Unknown
+  initial: Unknown
+
+derek_presence_status:
+  name: Derek
+  options:
+    - Home
+    - Just Arrived
+    - Just Left
+    - Away
+    - Extended Away
+
+kalee_presence_status:
+  name: Kalee
+  options:
+    - Home
+    - Just Arrived
+    - Just Left
+    - Away
+    - Extended Away
+
+nolan_presence_status:
+  name: Nolan
+  options:
+    - Home
+    - Just Arrived
+    - Just Left
+    - Away
+    - Extended Away

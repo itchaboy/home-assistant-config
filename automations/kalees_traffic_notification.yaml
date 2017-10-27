@@ -1,0 +1,20 @@
+- alias: 'Send commute time notification'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.kalees_phone
+      to: 'not_home'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        after: '06:00:00'
+        before: '10:00:00'
+#      - condition: state
+#        entity_id: binary_sensor.workday
+#        state: 'on'
+  action:
+    - service: notify.kalee
+      data_template:
+        message: >
+          "It should take you about {{ states('sensor.to_lafontaine') }} minutes to get to work. Drive safe :)"

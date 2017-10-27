@@ -1,0 +1,39 @@
+- alias: Derek is home, play some 50's
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.dereks_phone
+      to: 'home'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.kalee_nolan
+        state: 'not_home'
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: input_select.day_period
+            state: 'Morning'
+          - condition: state
+            entity_id: input_select.day_period
+            state: 'Afternoon'
+          - condition: state
+            entity_id: input_select.day_period
+            state: 'Evening'
+  action:
+    - wait_template: "{{ states.binary_sensor.front_door_sensor_sensor.state == 'on' }}"
+      timeout: '00:30:00'
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.spotify
+        source: Living Room
+    - service: media_player.shuffle_set
+      data:
+        entity_id: media_player.spotify
+        shuffle: true
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.spotify
+        media_content_type: playlist
+        media_content_id: spotify:user:spotify:playlist:37i9dQZF1DWSV3Tk4GO2fq # All Out 50's

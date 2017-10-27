@@ -1,0 +1,5 @@
+  - platform: ups
+    username: !secret dereks_email
+    password: !secret ups_pass
+#    update_interval:
+#      minutes: 10 

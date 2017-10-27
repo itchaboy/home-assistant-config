@@ -1,0 +1,16 @@
+- alias: Close blinds at sunset
+  initial_state: 'on'
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: '+00:10:00'
+    - platform: sun
+      event: sunrise
+  action:
+    - service: mqtt.publish
+      data_template:
+        payload: >
+          {% if trigger.event == 'sunset' %} close
+          {% elif trigger.event == 'sunrise' %} open
+          {% endif %}
+        topic: /blinds/office/command

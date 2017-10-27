@@ -1,0 +1,44 @@
+- alias: Email Breach - Derek
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.breaches_derekantosiekgmailcom
+      above: 0
+  action:
+    - service: notify.derek
+      data:
+        message: Looks like your email may have been breached! Check here, https://haveibeenpwned.com/
+
+- alias: Email Breach - Kalee
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.breaches_nantzkrgmailcom
+      above: 0
+  action:
+    - service: notify.kalee
+      data:
+        message: Looks like your email may have been breached! Check here, https://haveibeenpwned.com/
+
+- alias: Email Breach - Nolan
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.breaches_cnolandooleygmailcom
+      above: 0
+  action:
+    - service: notify.nolan
+      data:
+        title: Warning!
+        message: Looks like your email may have been breached! Check here, https://haveibeenpwned.com/
+
+- alias: Email Breach - Mindy
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.breaches_mnantzgmailcom
+      above: 0
+  action:
+    - service: notify.derek
+      data:
+        message: Looks like Mindy's email may have been breached! Check here, https://haveibeenpwned.com/

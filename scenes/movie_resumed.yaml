@@ -1,0 +1,28 @@
+- name: Movie Resumed
+  entities:
+    light.bathroom_light:
+      state: off
+      transition: 5
+    light.hall_light:
+      state: off
+      transition: 5
+    light.bar_light:
+      state: off
+      transition: 5
+    light.living_room_lights:
+      state: off
+      transition: 5
+    light.bedroom_lamps:
+      state: off
+      transition: 5
+    light.bedroom_lights:
+      state: off
+      transition: 5
+    light.sink_light:
+      state: off
+      transition: 5
+    light.guest_bathroom_light:
+      state: off
+      transition: 5
+    light.kitchen_lights_level: off
+    switch.cabinet_lights: off

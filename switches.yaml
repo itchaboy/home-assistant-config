@@ -1,0 +1,141 @@
+# OFFICE BLINDS
+  - platform: mqtt
+    name: "Office Blinds"
+    command_topic: "/blinds/office/command"
+    state_topic: "/blinds/office/state"
+    payload_on: "open"
+    payload_off: "close"
+    qos: 1
+    optimistic : true
+
+# OFFICE PC
+  - platform: wake_on_lan
+    name: "Office PC"
+    mac_address: !secret office_pc_mac
+    host: "192.168.0.110"
+    broadcast_address: 255.255.255.255
+    turn_off:
+      - service: script.turn_on
+        data:
+          entity_id: script.sleep_office_pc
+# PLEX SERVER PC
+  - platform: wake_on_lan
+    name: "Plex Server"
+    mac_address: !secret plex_server_mac
+    host: "192.168.0.111"
+    broadcast_address: 255.255.255.255
+
+# BROADLINK SWITCHES
+  - platform: broadlink
+    host: 192.168.0.104
+    mac: !secret broadlink_rm_pro_mac
+    timeout: 15
+    switches:
+      living_room_tv_power:
+        friendly_name: "Living Room TV Power"
+        command_on: 'JgBYAAABJ5MTEhMSExISOBE4ETgSExITEjcSNxM3EhMSExEUETgTNhMSEzYTExETEzcSExEUEhMROBITEjcSNxMSEzcSNxI3EwAFHwABJUsSAAxKAAEmShMADQU='
+        command_off: 'JgBYAAABJ5MTEhMSExISOBE4ETgSExITEjcSNxM3EhMSExEUETgTNhMSEzYTExETEzcSExEUEhMROBITEjcSNxMSEzcSNxI3EwAFHwABJUsSAAxKAAEmShMADQU='
+
+      denon_receiver_power:
+        friendly_name: "Denon Receiver Power"
+        command_on: 'JgCIAAYcCD0IGwgaCRoIPQgbCBoHHAgaCTwJPQg9CBoJGgcABaUIGgk9CBoJGggaCRoIPQg9CTwJPQgaCBsIGgk8CT0IAAWjChkIPQkaCBoJGgg9CRoIGgkaCBsIPQg9CD0KGQgaCQAFowgbCD0IGwgaCBsIGgk8CT0IPQg9ChgJGggbCD0IPQgADQU='
+        command_off: 'JgCIAAYcCD0IGwgaCBsIGgk8CRoIGwgaCD0JPAk9CBoIGwgABaQIGgk8CRoJGggaCTwJGgg9CD0JPAkaCBsIGgg9CTwJAAWjCRoIPQgbCBoIGwgbCD0IGgkaCBsIPQg9CD0IGwgaCAAFpAgbCD0IGgkaCBsIPQgaCTwJPQg9CBoJGggbCD0IPQgADQU='
+
+      denon_toggle_input_steam:
+        friendly_name: "Steam"
+        command_on: 'JgCIAAYcCD0IGgkaCBsIPQg9CBsKGAgbCD0IPQg9CBsIGgkABaMKGQo7ChkIGggbCBoIGwg9CD0IOwwZCBoJGgc+CTwJAAWjChkIPQgaCRoIGwg9CjsIGwgaCBsHPgg9CD0IGwgaCQAFowoZCD0IGgkaCBsIGggbCD0IPQg9CRoIGgkaCD0IPQoADQU='
+
+      denon_toggle_input_firestick:
+        friendly_name: "Firestick"
+        command_on: 'JgCIAAcbCTwKGQgbCBoIPQkaCBoJPQgaCBsIPQg9ChkIGgkABaMKGQg9CBoJGggbBxsIPQk8CRoKOwo7ChkIGgk9CjsIAAWjCxgKOwoZCBoJGgg9ChkIGgo7CxgKGQg9CD0IGwgaCQAFowgaCzsKGAgbChgJGgg9CD0KGQg9CD0IGwgaCTwJPQgADQU='
+
+      denon_toggle_input_server:
+        friendly_name: "Server"
+        command_on: 'JgCIAAoYCzsKGAkaCBoKGQoZCBoKOwoZCBoLOwg9ChgIGwoABaIKGAo7ChkKGQgaCTwJPAs7CBoKOwo7CxgKGQg9CjsKAAWiChgKOwkaChkIGggbChgKGQo7CBsIGgk8CjwIGggbCgAFogoYCjsKGQoYCRsHPQk8CTwJGgg9CjsKGQoYCT0IPQoADQU='
+
+  - platform: template
+    switches:
+      tv:
+        value_template: "{{ is_state('switch.denon_receiver_power', 'on') }}"
+        turn_on:
+          - service: switch.turn_on
+            entity_id: switch.living_room_tv_power
+          - service: switch.turn_on
+            entity_id: switch.denon_receiver_power
+          - service: switch.turn_on
+            entity_id: switch.tv_backlight
+        turn_off:
+          - service: switch.turn_off
+            entity_id: switch.living_room_tv_power
+          - service: switch.turn_off
+            entity_id: switch.denon_receiver_power
+          - service: switch.turn_off
+            entity_id: switch.tv_backlight
+
+      master_bedroom_motion:
+        value_template: "{{ is_state('input_boolean.master_bedroom_motion', 'on') }}"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.master_bedroom_motion
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.master_bedroom_motion
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.in_bed
+          - service: light.turn_off
+            entity_id: light.bedroom_lights
+            data:
+              transition: 1
+          - service: light.turn_off
+            entity_id: light.bedroom_lamps
+            data:
+              transition: 1
+
+      study_mode:
+        value_template: "{{ is_state('input_boolean.study_mode', 'on') }}"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.study_mode
+          - service: light.turn_on
+            entity_id:
+              - light.bedroom_lights
+              - light.bathroom_light
+            data:
+              transition: 1
+              brightness: 255
+          - service: light.turn_on
+            entity_id: light.bedroom_lamps
+            data:
+              transition: 1
+              brightness: 255
+              color_temp: 300
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.study_mode
+
+      vacuum:
+        value_template: "{{ is_state('vacuum.xiaomi_vacuum_cleaner', 'on') }}"
+        turn_on:
+          - service: vacuum.start_pause
+            entity_id: vacuum.xiaomi_vacuum_cleaner
+        turn_off:
+          - service: vacuum.return_to_base
+            entity_id: vacuum.xiaomi_vacuum_cleaner
+
+      tv_backlight:
+        value_template: "{{ is_state('input_boolean.tv_backlight', 'on') }}"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.tv_backlight
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.tv_backlight
+
+      poop_mode:
+        value_template: "{{ is_state('input_boolean.poop_mode', 'on') }}"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.poop_mode
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.poop_mode

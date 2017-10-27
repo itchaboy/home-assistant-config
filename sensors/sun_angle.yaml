@@ -1,0 +1,7 @@
+  - platform: template
+    sensors:
+      solar_angle:
+        value_template: '{{ "%+.1f"|format(states.sun.sun.attributes.elevation) }}'
+        entity_id: sun.sun
+        friendly_name: 'Sun Angle'
+        unit_of_measurement: '°'

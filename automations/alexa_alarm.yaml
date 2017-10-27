@@ -1,0 +1,104 @@
+- alias: Alexa Alarm - Livingroom
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.alexa_timer
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.last_room_with_motion
+      state: 'Living Room'
+  action:
+    - service: light.turn_on
+      entity_id: light.bar_light
+      data:
+        transition: 1
+        flash: long
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.alexa_timer
+    - service: media_player.media_pause
+      entity_id: media_player.amazon_fire_tv
+
+- alias: Alexa Alarm - Kitchen
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.alexa_timer
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.last_room_with_motion
+      state: 'Kitchen'
+  action:
+    - service: light.turn_on
+      entity_id: light.sink_light
+      data:
+        transition: 1
+        flash: long
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.alexa_timer
+    - service: media_player.media_pause
+      entity_id: media_player.amazon_fire_tv
+
+- alias: Alexa Alarm - Laundry Room
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.alexa_timer
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.last_room_with_motion
+      state: 'Laundry Room'
+  action:
+    - service: light.turn_on
+      entity_id: light.laundry_light
+      data:
+        transition: 1
+        flash: long
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.alexa_timer
+    - service: media_player.media_pause
+      entity_id: media_player.amazon_fire_tv
+
+- alias: Alexa Alarm - Master Bedroom
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.alexa_timer
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.last_room_with_motion
+      state: 'Master Bedroom'
+  action:
+    - service: light.turn_on
+      entity_id: light.bedroom_lamps
+      data:
+        transition: 1
+        flash: long
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.alexa_timer
+    - service: media_player.media_pause
+      entity_id: media_player.amazon_fire_tv
+
+- alias: Alexa Alarm - Master Bathroom
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.alexa_timer
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.last_room_with_motion
+      state: 'Master Bathroom'
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 1
+        flash: long
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.alexa_timer
+    - service: media_player.media_pause
+      entity_id: media_player.amazon_fire_tv

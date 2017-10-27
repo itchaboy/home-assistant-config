@@ -1,0 +1,10 @@
+  - platform: template
+    sensors:
+      vacuum_status:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.status }}'
+        entity_id: vacuum.xiaomi_vacuum_cleaner
+        friendly_name: Vacuum Status
+      vacuum_cleaned_area:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaned_area }}'
+        entity_id: vacuum.xiaomi_vacuum_cleaner
+        friendly_name: Vacuum Cleaned Area

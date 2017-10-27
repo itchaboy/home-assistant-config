@@ -1,0 +1,14 @@
+  - platform: template
+    sensors:
+      derek:
+        value_template: '{{ states.input_select.derek_presence_status.state }}'
+        entity_id: input_select.derek_presence_status
+        friendly_name: 'Derek'
+      kalee:
+        value_template: '{{ states.input_select.kalee_presence_status.state }}'
+        entity_id: input_select.kalee_presence_status
+        friendly_name: 'Kalee'
+      nolan:
+        value_template: '{{ states.input_select.nolan_presence_status.state }}'
+        entity_id: input_select.nolan_presence_status
+        friendly_name: 'Nolan'

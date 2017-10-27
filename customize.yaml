@@ -1,0 +1,264 @@
+###### LIGHTS
+    sensor.indoor_light_level:
+      icon: mdi:flashlight
+    sensor.indoor_brightness:
+      icon: mdi:flashlight
+
+    switch.mirror_lights_switch:
+      friendly_name: Mirror Lights
+      icon: mdi:lightbulb
+      emulated_hue_hidden: false
+      emulate_hue_name: Mirror Lights
+    light.kitchen_lights_level:
+      friendly_name: Kitchen Lights
+      icon: mdi:lightbulb
+      emulated_hue_hidden: false
+      emulate_hue_name: Kitchen Lights
+    switch.desk_lamp_switch:
+      friendly_name: Desk Lamp
+      icon: mdi:lightbulb
+      emulated_hue_hidden: false
+      emulated_hue_name: Desk Lamp
+    switch.cabinet_lights:
+      icon: mdi:lightbulb
+    switch.tv_backlight:
+      icon: mdi:lightbulb
+      friendly_name: TV Backlight
+      emulated_hue_hidden: false
+      emulated_hue_name: Backlight
+    group.bedroom_lights:
+      icon: mdi:lightbulb
+
+###### Household
+    sensor.derek:
+      entity_picture: /local/derek.png
+    sensor.kalee:
+      entity_picture: /local/kalee.png
+    sensor.nolan:
+      entity_picture: /local/nolan.png
+
+###### SWITCHES
+    switch.office_blinds:
+      friendly_name: Office Blinds
+      icon: mdi:blinds
+      emulated_hue_hidden: false
+      emulate_hue_name: Office Blinds
+    switch.denon_receiver_power:
+      friendly_name: Denon Receiver
+      emulated_hue_hidden: false
+      emulated_hue_name: Receiver
+    switch.tv:
+      friendly_name: TV
+      emulated_hue_hidden: false
+      emulated_hue_name: TV
+    switch.master_bedroom_motion:
+      friendly_name: Bedroom Motion
+      icon: mdi:walk
+      emulated_hue_hidden: false
+      emulated_hue_name: Bedroom Motion
+    switch.study_mode:
+      friendly_name: Study Mode
+      icon: mdi:book-open-page-variant
+      emulated_hue_hidden: false
+      emulated_hue_name: Study Mode
+    switch.poop_mode:
+      friendly_name: Poop Mode
+      icon: mdi:emoticon-poop
+      emulated_hue_hidden: false
+      emulated_hue_name: Poop Mode
+    switch.office_pc:
+      icon: mdi:desktop-tower
+      emulated_hue_hidden: false
+      emulated_hue_name: Computer
+    switch.plex_server:
+      icon: mdi:server
+    switch.vacuum:
+      icon: mdi:roomba
+      emulated_hue_hidden: false
+      emulated_hue_name: Vacuum
+
+###### SCRIPTS
+    switch.steam:
+      emulated_hue_hidden: false
+      emulated_hue_name: Steam
+    switch.firestick:
+      emulated_hue_hidden: false
+      emulated_hue_name: Firestick
+    switch.server:
+      emulated_hue_hidden: false
+      emulated_hue_name: Server
+
+###### SCENES
+    scene.bright:
+      emulated_hue_hidden: false
+      emulated_hue_name: Bright
+      icon: mdi:brightness-5
+    scene.medium:
+      emulated_hue_hidden: false
+      emulated_hue_name: Medium
+      icon: mdi:brightness-6
+    scene.dim:
+      emulated_hue_hidden: false
+      emulated_hue_name: Dim
+      icon: mdi:brightness-4
+    scene.movie:
+      emulated_hue_hidden: false
+      emulated_hue_name: Movie Mode
+      icon: mdi:theater
+    scene.lights_off:
+      emulated_hue_hidden: false
+      emulated_hue_name: Lights Off
+      icon: mdi:brightness-3
+
+###### WEATHER
+    climate.thermostat:
+      friendly_name: Ecobee
+    sensor.thermostat_temperature:
+      friendly_name: Thermostat Temperature
+    sensor.thermostat_humidity:
+      friendly_name: Thermostat Humidity
+      icon: mdi:water-percent
+    sensor.bedroom_temperature:
+      friendly_name: Bedroom Temperature
+    sensor.bathroom_motion_sensor_relative_humidity:
+      friendly_name: Bathroom Humidity
+      icon: mdi:water-percent
+    sensor.bathroom_motion_sensor_temperature:
+      friendly_name: Bathroom Temperature
+
+    sensor.dark_sky_temperature:
+      friendly_name: Outdoor Temperature
+    sensor.dark_sky_humidity:
+      friendly_name: Outdoor Humidity
+    sensor.dark_sky_apparent_temperature:
+      friendly_name: Real Feel
+    sensor.dark_sky_precip_probability:
+      friendly_name: Precip Probability
+    sensor.dark_sky_precip_intensity:
+      friendly_name: Precip Intensity
+    sensor.dark_sky_minutely_summary:
+      friendly_name: Current Weather
+    sensor.dark_sky_precip:
+      friendly_name: Precip Type
+      icon: mdi:weather-snowy-rainy
+    sensor.dark_sky_cloud_coverage:
+      friendly_name: Cloud Coverage
+    sensor.dark_sky_wind_speed:
+      friendly_name: Wind Speed
+    sensor.dark_sky_nearest_storm_distance:
+      friendly_name: Nearest Storm
+    sensor.dark_sky_pressure:
+      friendly_name: Pressure
+    sensor.solar_angle:
+      icon: mdi:weather-sunset-up
+
+    senser.burn_time_derek:
+      icon: mdi:fire
+    senser.burn_time_kalee:
+      icon: mdi:fire
+    sensor.uv_category:
+      icon: mdi:white-balance-sunny
+
+###### POLLEN + FLU
+    sensor.pollen_index:
+      icon: mdi:flower
+    sensor.top_allergen_1:
+      icon: mdi:flower
+    sensor.top_allergen_2:
+      icon: mdi:flower
+    sensor.top_allergen_3:
+      icon: mdi:flower
+    sensor.pollen_trend:
+      icon: mdi:flower
+    sensor.pollen_outlook:
+      icon: mdi:flower
+    sensor.pollen_season:
+      icon: mdi:flower
+    sensor.pollen_index_forecast:
+      icon: mdi:flower
+    sensor.cold__flu_percentage:
+      icon: mdi:snowflake
+
+###### Pi Stats
+    sensor.cpu_used_home:
+      friendly_name: CPU Use
+      icon: mdi:chip
+    sensor.disk_used_home:
+      friendly_name: Disk Use
+    sensor.disk_free_home:
+      friendly_name: Disk Free
+    sensor.ram_used_home:
+      friendly_name: RAM Use
+    sensor.ram_available_home:
+      friendly_name: RAM Free
+
+###### PLEX SERVER
+    sensor.plex:
+      friendly_name: Users
+      icon: mdi:plex
+    sensor.plexy_intel_core_i73770_load_cpu_total:
+      friendly_name: CPU Load
+      icon: mdi:chip
+    sensor.plexy_intel_core_i73770_powers_cpu_package:
+      friendly_name: CPU Draw
+      icon: mdi:chip
+    sensor.plexy_intel_core_i73770_temperatures_cpu_package:
+      friendly_name: CPU Temp
+      icon: mdi:chip
+    sensor.plexy_generic_memory_load_memory:
+      friendly_name: Memory Load
+      icon: mdi:memory
+    sensor.plexy_adata_sp900_levels_remaining_life:
+      friendly_name: SSD Life
+      icon: mdi:harddisk
+    sensor.plexy_adata_sp900_load_used_space:
+      friendly_name: SSD Used
+      icon: mdi:harddisk
+    sensor.plexy_wdc_wd10ears22y5b1_load_used_space:
+      friendly_name: Movie HDD Used
+      icon: mdi:harddisk
+    sensor.plexy_wdc_wd1001fals00y6a0_load_used_space:
+      friendly_name: TV Show HDD Used
+      icon: mdi:harddisk
+
+###### Travel Sensors
+    sensor.to_lafontaine:
+      icon: mdi:car
+    sensor.to_huf:
+      icon: mdi:car
+
+###### SECURITY SENSORS
+    sensor.front_door:
+      icon: mdi:locker
+
+###### EMAIL BREACHES
+    sensor.breaches_derekantosiekgmailcom:
+      friendly_name: derek.antosiek@gmail.com
+      icon: mdi:email-alert
+    sensor.breaches_nantzkrgmailcom:
+      friendly_name: nantz.kr@gmail.com
+      icon: mdi:email-alert
+    sensor.breaches_cnolandooleygmailcom:
+      friendly_name: c.nolandooley@gmail.com
+      icon: mdi:email-alert
+    sensor.breaches_mnantzgmailcom:
+      friendly_name: mnantz@gmail.com
+      icon: mdi:email-alert
+
+###### VACUUM
+    vacuum.xiaomi_vacuum_cleaner:
+      friendly_name: Vacuum
+      icon: mdi:roomba
+    sensor.vacuum_status:
+      friendly_name: Status
+      icon: mdi:roomba
+
+###### ENTERTAINMENT
+    sensor.steam_game:
+      icon: mdi:google-controller
+    sensor.tv_usage:
+      icon: mdi:television
+
+###### VERSION
+    sensor.current_version:
+      icon: mdi:cloud-check

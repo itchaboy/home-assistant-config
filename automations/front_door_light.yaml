@@ -1,0 +1,114 @@
+- alias: Front door light on during a movie
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_sensor_sensor
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: light.door_light
+        state: 'off'
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Movie'
+  action:
+    - service: light.turn_on
+      entity_id: light.door_light
+      data:
+        transition: 1
+        brightness_pct: 10
+
+- alias: Front door light on during morning
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_sensor_sensor
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: light.door_light
+        state: 'off'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Morning'
+      - condition: state
+        entity_id: input_boolean.dark_inside
+        state: 'on'
+  action:
+    - service: light.turn_on
+      entity_id: light.door_light
+      data_template:
+        transition: 1
+        brightness_pct: 50
+
+- alias: Front door light on during night
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_sensor_sensor
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: light.door_light
+        state: 'off'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Night'
+  action:
+    - service: light.turn_on
+      entity_id: light.door_light
+      data_template:
+        transition: 1
+        brightness_pct: 40
+
+- alias: Front door light on during midnight
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_sensor_sensor
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: light.door_light
+        state: 'off'
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Midnight'
+  action:
+    - service: light.turn_on
+      entity_id: light.door_light
+      data_template:
+        transition: 1
+        brightness_pct: 10
+
+# Turns light off after door has been closed for 30 seconds
+- alias: Front door light off after 30 seconds
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_sensor_sensor
+      to: 'off'
+      for:
+        seconds: 30
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Lights Off'
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Movie'
+  action:
+    - service: light.turn_off
+      entity_id: light.door_light
+      data:
+        transition: 5

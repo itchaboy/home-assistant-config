@@ -1,0 +1,19 @@
+- name: Lights Off DK
+  entities:
+    light.bedroom_lights:
+      state: off
+      transition: 5
+    light.bedroom_lamps:
+      state: off
+      transition: 5
+    light.bathroom_light:
+      state: off
+      transition: 5
+    light.office_light:
+      state: off
+      transition: 5
+    switch.desk_lamp_switch: off
+    switch.mirror_lights_switch: off
+    switch.office_pc: off
+    input_boolean.study_mode: off
+    input_boolean.master_bedroom_motion: on

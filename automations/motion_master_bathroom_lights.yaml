@@ -1,0 +1,307 @@
+- alias: Bathroom Motion - Morning Dim # 6AM - 11AM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Morning'
+      - condition: state
+        entity_id: light.bathroom_light
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 15
+        brightness: 150
+        color_temp: 500
+
+- alias: Bathroom Motion - Morning Bright # 6AM - 11AM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Morning'
+      - condition: state
+        entity_id: light.bathroom_light
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'on'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 5
+        brightness: 150
+        color_temp: 300
+    - service: switch.turn_on
+      entity_id: switch.mirror_lights_switch
+
+- alias: Bathroom Motion - Afternoon # 11AM - 7PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Afternoon'
+      - condition: state
+        entity_id: light.bathroom_light
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 1
+        brightness: 255
+        color_temp: 300
+    - service: switch.turn_on
+      entity_id: switch.mirror_lights_switch
+
+- alias: Bathroom Motion - Evening # 7PM - 9PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Evening'
+      - condition: state
+        entity_id: light.bathroom_light
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 1
+        brightness: 180
+        color_temp: 500
+
+- alias: Bathroom Motion - Night Dim # 9PM - 11PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Night'
+      - condition: state
+        entity_id: light.bathroom_light
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 10
+        brightness: 40
+        color_name: red
+
+- alias: Bathroom Motion - Night Bright # 9PM - 11PM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Night'
+      - condition: state
+        entity_id: light.bathroom_light
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.master_bedroom_motion
+        state: 'on'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 1
+        brightness: 60
+        color_temp: 500
+
+- alias: Bathroom Motion - Midnight # 11PM - 6AM
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.day_period
+        state: 'Midnight'
+      - condition: state
+        entity_id: light.bathroom_light
+        state: 'off'
+      - condition: template
+        value_template: "{{ states.input_select.lighting_mode.state != 'Movie' }}"
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 15
+        brightness: 30
+        color_name: red
+
+- alias: Bathroom Motion - Movie Mode
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: light.bathroom_light
+        state: 'off'
+      - condition: state
+        entity_id: input_select.lighting_mode
+        state: 'Movie'
+  action:
+    - service: light.turn_on
+      entity_id: light.bathroom_light
+      data:
+        transition: 1
+        brightness: 100
+        color_temp: 500
+
+- alias: Motion Off - Bathroom light off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.master_bathroom_motion_sensor
+      to: 'off'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.study_mode
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.poop_mode
+        state: 'off'
+  action:
+    - service: light.turn_off
+      entity_id: light.bathroom_light
+      data:
+        transition: 10
+    - service: switch.turn_off
+      entity_id: switch.mirror_lights_switch
+
+- alias: Motion Off Poop Mode - Bathroom light off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.master_bathroom_motion_sensor
+      to: 'off'
+      for:
+        minutes: 9
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.study_mode
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.poop_mode
+        state: 'on'
+  action:
+    - service: light.turn_off
+      entity_id: light.bathroom_light
+      data:
+        transition: 10
+    - service: switch.turn_off
+      entity_id: switch.mirror_lights_switch
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.poop_mode
+
+###### MOTION BOOLEAN
+- alias: Bathroom Motion Boolean - On
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+    - platform: state
+      entity_id: sensor.bathroom_motion_sensor_alarm_level
+      to: '255'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.master_bathroom_motion_sensor
+
+- alias: Bathroom Motion Boolean - Off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'standby'
+      for:
+        minutes: 1
+    - platform: state
+      entity_id: sensor.bathroom_motion_sensor_alarm_level
+      to: '0'
+      for:
+        minutes: 1
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: sensor.bathroom_motion_sensor_alarm_level
+        state: '0'
+        for:
+          minutes: 1
+      - condition: state
+        entity_id: sensor.sn4_master_bathroom_pir
+        state: 'standby'
+        for:
+          minutes: 1
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.master_bathroom_motion_sensor

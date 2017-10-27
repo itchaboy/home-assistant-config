@@ -1,0 +1,7 @@
+- alias: heal zwave mesh at 2:30am
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '2:30:00'
+  action:
+    - service: zwave.heal_network

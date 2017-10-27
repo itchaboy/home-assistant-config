@@ -1,0 +1,51 @@
+morning_summary:
+  name: Morning Summary
+  initial: off
+  icon: mdi:text-to-speech
+
+guest_mode:
+  name: Guest Mode
+  initial: off
+  icon: mdi:human-male-female
+
+alexa_timer:
+  name: Alexa Timer
+  initial: off
+  icon: mdi:alarm
+
+vacuum_active:
+  name: Vacuum Active
+
+tv_backlight:
+  name: TV Backlight
+
+poop_mode:
+  name: Poop Mode
+
+follow_me:
+  name: Follow Me
+  initial: off
+  icon: mdi:spotify
+
+in_bed:
+  name: In Bed
+  initial: off
+
+# MOTION SENSORS
+living_area_motion_sensor:
+  name: Living Area Motion Sensor
+  initial: off
+  icon: mdi:walk
+
+master_bathroom_motion_sensor:
+  name: Master Bathroom Motion Sensor
+  initial: off
+
+# MOTION BOOLEANS
+master_bedroom_motion:
+  name: Master Bedroom Motion
+  initial: on
+
+study_mode:
+  name: Study Mode
+  initial: off

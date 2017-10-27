@@ -1,0 +1,6 @@
+  - platform: plex
+    host: 192.168.0.111
+    name: Plex
+    username: !secret plex_user
+    password: !secret plex_pass
+    server: PLEXY

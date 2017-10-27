@@ -1,0 +1,145 @@
+- alias: Mark person as just arrived
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.dereks_phone
+      from: 'not_home'
+      to: 'home'
+    - platform: state
+      entity_id: device_tracker.kalees_phone
+      from: 'not_home'
+      to: 'home'
+    - platform: state
+      entity_id: device_tracker.nolans_phone
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'device_tracker.dereks_phone' %} input_select.derek_presence_status
+          {% elif trigger.entity_id == 'device_tracker.kalees_phone' %} input_select.kalee_presence_status
+          {% elif trigger.entity_id == 'device_tracker.nolans_phone' %} input_select.nolan_presence_status
+          {% endif %}
+        option: Just Arrived
+
+- alias: Mark person as home
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.derek_presence_status
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.kalee_presence_status
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.nolan_presence_status
+      to: 'Just Arrived'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.derek_presence_status
+      from: 'Just Left'
+      to: 'Just Arrived'
+    - platform: state
+      entity_id: input_select.kalee_presence_status
+      from: 'Just Left'
+      to: 'Just Arrived'
+    - platform: state
+      entity_id: input_select.nolan_presence_status
+      from: 'Just Left'
+      to: 'Just Arrived'
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'input_select.derek_presence_status' %} input_select.derek_presence_status
+          {% elif trigger.entity_id == 'input_select.kalee_presence_status' %} input_select.kalee_presence_status
+          {% elif trigger.entity_id == 'input_select.nolan_presence_status' %} input_select.nolan_presence_status
+          {% endif %}
+        option: Home
+
+- alias: Mark person as just left
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: device_tracker.dereks_phone
+      from: 'home'
+      to: 'not_home'
+    - platform: state
+      entity_id: device_tracker.kalees_phone
+      from: 'home'
+      to: 'not_home'
+    - platform: state
+      entity_id: device_tracker.nolans_phone
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'device_tracker.dereks_phone' %} input_select.derek_presence_status
+          {% elif trigger.entity_id == 'device_tracker.kalees_phone' %} input_select.kalee_presence_status
+          {% elif trigger.entity_id == 'device_tracker.nolans_phone' %} input_select.nolan_presence_status
+          {% endif %}
+        option: Just Left
+
+- alias: Mark person as away
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.derek_presence_status
+      to: 'Just Left'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.kalee_presence_status
+      to: 'Just Left'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.nolan_presence_status
+      to: 'Just Left'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'input_select.derek_presence_status' %} input_select.derek_presence_status
+          {% elif trigger.entity_id == 'input_select.kalee_presence_status' %} input_select.kalee_presence_status
+          {% elif trigger.entity_id == 'input_select.nolan_presence_status' %} input_select.nolan_presence_status
+          {% endif %}
+        option: Away
+
+- alias: Mark person as extended away
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.derek_presence_status
+      to: 'Away'
+      for:
+        hours: 24
+    - platform: state
+      entity_id: input_select.kalee_presence_status
+      to: 'Away'
+      for:
+        hours: 24
+    - platform: state
+      entity_id: input_select.nolan_presence_status
+      to: 'Away'
+      for:
+        hours: 24
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'input_select.derek_presence_status' %} input_select.derek_presence_status
+          {% elif trigger.entity_id == 'input_select.kalee_presence_status' %} input_select.kalee_presence_status
+          {% elif trigger.entity_id == 'input_select.nolan_presence_status' %} input_select.nolan_presence_status
+          {% endif %}
+        option: Extended Away

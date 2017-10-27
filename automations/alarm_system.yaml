@@ -1,0 +1,255 @@
+- alias: 'Trigger alarm while armed away'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_sensor_sensor
+      to: 'on'
+    - platform: state
+      entity_id: sensor.office_window_sensor_alarm_level
+      to: '255'
+    - platform: state
+      entity_id: sensor.sn1_bedroom_pir
+      to: 'motion_detected'
+    - platform: state
+      entity_id: sensor.sn2_livingroom_bar_pir
+      to: 'motion_detected'
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion_detected'
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion_detected'
+    - platform: state
+      entity_id: sensor.sn5_livingroom_couch_pir
+      to: 'motion_detected'
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.home_alarm
+      state: 'armed_away'
+  action:
+    - service: alarm_control_panel.alarm_trigger
+      entity_id: alarm_control_panel.home_alarm
+    - service: notify.household
+      data:
+        message: ATTENTION. The alarm system has just been triggered. Alerts will follow.
+
+# Alarm Triggered.
+- alias: Alarm has been triggered, attempt photo captures.
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: alarm_control_panel.home_alarm
+      to: 'triggered'
+  action:
+    - service: notify.derek
+      data:
+        message: Intruder Alert. Attempting photo captures.
+        data:
+          photo:
+            - url: http://192.168.0.115:8080/photo.jpg
+              username: !secret android_ip_webcam_user
+              password: !secret android_ip_webcam_pass
+    - delay: '00:00:01'
+    - service: notify.derek
+      data:
+        message: Intruder Alert. Attempting photo captures.
+        data:
+          photo:
+            - url: http://192.168.0.115:8080/photo.jpg
+              username: !secret android_ip_webcam_user
+              password: !secret android_ip_webcam_pass
+    - delay: '00:00:01'
+    - service: notify.derek
+      data:
+        message: Intruder Alert. Attempting photo captures.
+        data:
+          photo:
+            - url: http://192.168.0.115:8080/photo.jpg
+              username: !secret android_ip_webcam_user
+              password: !secret android_ip_webcam_pass
+    - delay: '00:00:01'
+    - service: notify.derek
+      data:
+        message: Intruder Alert. Attempting photo captures.
+        data:
+          photo:
+            - url: http://192.168.0.115:8080/photo.jpg
+              username: !secret android_ip_webcam_user
+              password: !secret android_ip_webcam_pass
+
+# Make sure the alarm has been armed once everyone leaves
+- alias: Everyone has left, arm the alarm system
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.people
+      to: 'not_home'
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.home_alarm
+      state: 'disarmed'
+  action:
+    - service: alarm_control_panel.alarm_arm_away
+      entity_id: alarm_control_panel.home_alarm
+      data:
+        code: !secret alarm_code
+    - service: notify.derek_and_kalee
+      data:
+        message: Everyone has left. Arming the alarm system.
+
+
+# Disarm the alarm if someone comes home
+- alias: Someone has arrived, disarm the alarm system
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: group.people
+      to: 'home'
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.home_alarm
+      state: 'armed_away'
+  action:
+    - service: alarm_control_panel.alarm_disarm
+      entity_id: alarm_control_panel.home_alarm
+      data:
+        code: !secret alarm_code
+    - service: notify.derek_and_kalee
+      data:
+        message: Someone has come home. Disarming the alarm system.
+
+# ALARM SYSTEM ALERTS
+- alias: Security Notification - Front Door Opened
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_sensor_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: group.people
+      state: 'not_home'
+  action:
+    - service: notify.household
+      data:
+        message: The front door has been opened and there's no one home!
+
+- alias: Security Notification - Master Bedroom Movement
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn1_bedroom_pir
+      to: 'motion dectected'
+  condition:
+    - condition: state
+      entity_id: input_boolean.home_alarm
+      state: 'on'
+  action:
+    - service: notify.household
+      data:
+        message: Motion was detected in the Master Bedroom!
+
+- alias: Security Notification - Master Bathroom Movement
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn4_master_bathroom_pir
+      to: 'motion detected'
+  condition:
+    - condition: state
+      entity_id: input_boolean.home_alarm
+      state: 'on'
+  action:
+    - service: notify.household
+      data:
+        message: Motion was detected in the Master Bathroom!
+
+- alias: Security Notification - Hallway Movement
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.thermostat_occupancy
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.home_alarm
+      state: 'on'
+  action:
+    - service: notify.household
+      data:
+        message: Motion was detected in the Hallway!
+
+- alias: Security Notification - Laundry Room Movement
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry_room_motion_sensor_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.home_alarm
+      state: 'on'
+  action:
+    - service: notify.household
+      data:
+        message: Motion was detected in the Laundry Room!
+
+- alias: Security Notification - Livingroom Movement
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn2_livingroom_bar_pir
+      to: 'motion detected'
+    - platform: state
+      entity_id: sensor.sn5_livingroom_couch_pir
+      to: 'motion detected'
+  condition:
+    - condition: state
+      entity_id: input_boolean.home_alarm
+      state: 'on'
+  action:
+    - service: notify.household
+      data:
+        message: Motion was detected in the Livingroom!
+
+- alias: Security Notification - Livingroom Movement
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.sn3_kitchen_pir
+      to: 'motion detected'
+  condition:
+    - condition: state
+      entity_id: input_boolean.home_alarm
+      state: 'on'
+  action:
+    - service: notify.household
+      data:
+        message: Motion was detected in the Kitchen!
+
+
+###### JUST IN CASE
+# FRONT DOOR LEFT OPEN
+#- alias: Front door was left open - send notification
+#  initial_state: 'on'
+#  trigger:
+#    - platform: state
+#      entity_id: group.people
+#      to: 'not_home'
+#  condition:
+#    - condition: state
+#      entity_id: binary_sensor.front_door_sensor_sensor
+#      state: 'on'
+#  action:
+#    - service_template: >
+#        {% if (is_state('sensor.derek', 'Just Left')) %}
+#          notify.derek
+#        {% endif %}
+#        {% if (is_state('sensor.kalee', 'Just Left')) %}
+#          notify.kalee
+#        {% endif %}
+#        {% if (is_state('sensor.nolan', 'Just Left')) %}
+#          notify.nolan
+#        {% endif %}
+#      data:
+#        message: Looks like the front door was left open!

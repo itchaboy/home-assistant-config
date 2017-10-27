@@ -1,0 +1,99 @@
+# MORNING
+- alias: Laundry Motion - Morning
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry_room_motion_sensor_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.day_period
+      state: 'Morning'
+  action:
+    - service: light.turn_on
+      entity_id: light.laundry_room_light
+      data:
+        transition: 1
+        brightness: 150 
+
+- alias: Laundry Motion - Afternoon
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry_room_motion_sensor_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.day_period
+      state: 'Afternoon'
+  action:
+    - service: light.turn_on
+      entity_id: light.laundry_room_light
+      data:
+        transition: 1
+        brightness: 255
+
+- alias: Laundry Motion - Evening
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry_room_motion_sensor_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.day_period
+      state: 'Evening'
+  action:
+    - service: light.turn_on
+      entity_id: light.laundry_room_light
+      data:
+        transition: 1
+        brightness: 180
+
+- alias: Laundry Motion - Night
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry_room_motion_sensor_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.day_period
+      state: 'Night'
+  action:
+    - service: light.turn_on
+      entity_id: light.laundry_room_light
+      data:
+        transition: 1
+        brightness: 100
+
+- alias: Laundry Motion - Midnight
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry_room_motion_sensor_sensor
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_select.day_period
+      state: 'Midnight'
+  action:
+    - service: light.turn_on
+      entity_id: light.laundry_room_light
+      data:
+        transition: 1
+        brightness: 50
+
+- alias: Laundry Motion - Off
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.laundry_room_motion_sensor_sensor
+      to: 'off'
+      for:
+        minutes: 1
+  action:
+    - service: light.turn_off
+      entity_id: light.laundry_room_light
+      data:
+        transition: 10

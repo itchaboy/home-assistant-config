@@ -1,0 +1,61 @@
+- alias: Morning Summary
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: switch.mirror_lights_switch
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: input_boolean.morning_summary
+      state: 'on'
+  action:
+    - delay: '00:00:01'
+    - service: notify.bathroom_tablet
+      data_template:
+        message: >
+          Good morning.
+          It's currently {{states.sensor.dark_sky_summary.state}} and {{states.sensor.dark_sky_temperature.state|round}} degrees.
+          {% if is_state("sensor.allergy_season", "True")  %}
+          The pollen level for today is {{states.sensor.pollen_level.state}} or {{states.sensor.pollen_index.state}} percent.
+          {% endif %}
+          {% if is_state("sensor.flu_season", "True") %}
+          The flu risk for today is {{states.sensor.cold_flu_risk.state}} or {{states.sensor.cold_flu_percentage.state}} percent.
+          {% endif %}
+          Today you can expect {{states.sensor.dark_sky_hourly_summary.state}}.
+          With a high of {{states.sensor.dark_sky_daily_high_temperature.state|round|int}} and a low of {{states.sensor.dark_sky_daily_low_temperature.state|round|int}}.
+          {% if states.sensor.dark_sky_wind_speed.state|int > 10 %}
+          Be advised it is windy outside.
+          {% endif %}
+          {% if states.sensor.to_lafontaine.state|int > 40 %}
+          Be advised the travel time to lafontaine is over 40 mintues today.
+          {% endif %}
+    - service: notify.derek_and_kalee
+      data_template:
+        message: >
+          Good morning.
+          It's currently {{states.sensor.dark_sky_summary.state}} and {{states.sensor.dark_sky_temperature.state|round}} degrees.
+          {% if is_state("sensor.allergy_season", "True")  %}
+          The pollen level for today is {{states.sensor.pollen_level.state}} or {{states.sensor.pollen_index.state}} percent.
+          {% endif %}
+          {% if is_state("sensor.flu_season", "True") %}
+          The flu risk for today is {{states.sensor.cold_flu_risk.state}} or {{states.sensor.cold_flu_percentage.state}} percent.
+          {% endif %}
+          Today you can expect {{states.sensor.dark_sky_hourly_summary.state}}.
+          With a high of {{states.sensor.dark_sky_daily_high_temperature.state|round|int}} and a low of {{states.sensor.dark_sky_daily_low_temperature.state|round|int}}.
+          {% if states.sensor.dark_sky_wind_speed.state|int > 10 %}
+          Be advised it is windy outside.
+          {% endif %}
+          {% if states.sensor.to_lafontaine.state|int > 40 %}
+          Be advised the travel time to lafontaine is over 40 mintues today.
+          {% endif %}
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.morning_summary
+
+- alias: Turn On - Morning Summary
+  initial_state: 'on'
+  trigger:
+    - platform: time
+      at: '06:00:00'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.morning_summary

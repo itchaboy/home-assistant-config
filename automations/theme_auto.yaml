@@ -1,0 +1,51 @@
+# Set dark theme for the night
+- alias: 'Set Night Theme'
+  initial_state: 'on'
+  trigger:
+    - platform: sun
+      event: sunset
+  action:
+    - service: frontend.set_theme
+      data:
+        name: 'dark_theme'
+
+# Set default theme for the day
+- alias: 'Set Day Theme'
+  initial_state: 'on'
+  trigger:
+    - platform: sun
+      event: sunrise
+  action:
+    - service: frontend.set_theme
+      data:
+        name: 'default'
+
+# Set dark theme for the night
+- alias: 'Set Night Theme on Start'
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: start
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+  action:
+    - service: frontend.set_theme
+      data:
+        name: 'dark_theme'
+
+# Set default theme for the day
+- alias: 'Set Day Theme on Start'
+  initial_state: 'on'
+  trigger:
+    - platform: homeassistant
+      event: start
+  condition:
+    - condition: state
+      entity_id: sun.sun
+      state: 'above_horizon'
+  action:
+    - service: frontend.set_theme
+      data:
+        name: 'default'

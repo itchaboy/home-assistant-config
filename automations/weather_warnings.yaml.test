@@ -1,0 +1,536 @@
+- alias: "Weather Warning - Tornado Warning"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Tornado Warning" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_TOR == "Tornado Warning" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A tornado warning has been announced for the whitmore lake area! Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Tornado Watch"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Tornado Watch" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_TOW == "Tornado Watch" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A tornado watch has been announced for the whitmore lake area! This is fucked! Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+    - service: light.turn_on
+      entity_id: light.living_room_lights, light.bedrom_lights, light.nolans_bedroom_lights, light.bathroom_light, light.guest_bathroom_light, light.sink_light, light.office_light
+      data:
+        transition: 1
+        flash: long
+    # FIRETV warning notification as well.
+
+- alias: "Weather Warning - Severe Thunderstorm Warning"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Severe Thunderstorm Warning" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_WRN == "Severe Thunderstorm Warning" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A severe thunderstorm warning has been announced for the whitmore lake area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Severe Thunderstorm Watch"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Severe Thunderstorm Watch" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_SEW == "Severe Thunderstorm Watch" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A severe thunderstorm watch has been announced for the whitmore lake area. This is gonna get hairy! Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Winter Weather Advisory"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Winter Weather Advisory" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_WIN == "Winter Weather Advisory" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A winter weather advisory has been announced for the whitmore lake area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Flood Warning"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Flood Warning" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_FLO == "Flood Warning" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A flood warning has been announced for the whitmore lake area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Flood Watch/Statement"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Flood Watch / Statement" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_WAT == "Flood Watch / Statement" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A flood watch/statement has been announced for the whitmore lake area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - High Wind Advisory"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "High Wind Advisory" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_WND == "High Wind Advisory" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A high wind advisory has been announced for the whitmore lake area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Severe Weather Statement"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Severe Weather Statement" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_SVR == "Severe Weather Statement" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A severe weather statement has been announced for the whitmore lake area. How vague right? Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Heat Advisory"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Heat Advisory" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_HEA == "Heat Advisory" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A heat advisory has been announced for the whitmore lake area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Dense Fog Advisory"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Dense Fog Advisory" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_FOG == "Dense Fog Advisory" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A dense fog advisory has been announced for the whitmore lake area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Special Weather Statement"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Special Weather Statement" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_SPE == "Special Weather Statement" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A special weather statement has been announced for the whitmore lake area. Like a normal weather statement only more special. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Fire Weather Advisory"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Fire Weather Advisory" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_FIR == "Fire Weather Advisory" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A fire weather advisory has been announced for the whitmore lake area! This is fucked! Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+    - service: light.turn_on
+      entity_id: light.living_room_lights, light.bedrom_lights, light.nolans_bedroom_lights, light.bathroom_light, light.guest_bathroom_light, light.sink_light, light.office_light
+      data:
+        transition: 1
+        flash: long
+    # FIRETV warning notification as well.
+
+- alias: "Weather Warning - Volcanic Activity Statement"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Volcanic Activity Statement" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_VOL == "Volcanic Activity Statement" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "Holy shit a volcanic avtivity?! We're all fucked oh my god. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Hurricane Wind Warning"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Hurricane Wind Warning" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_HWW == "Hurricane Wind Warning" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A hurricane wind warning has been announced for the whitmore lake area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Record Set"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Record Set" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_REC == "Record Set" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+
+- alias: "Weather Warning - Public Reports"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Public Reports" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_REP == "Public Reports" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: "Weather Warning - Public Information Statement"
+  initial_state: 'on'
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description == "Public Information Statement" }}'
+      - condition: template
+        value_template: '{{ states.sensor.pws_alerts.attributes.Description_PUB == "Public Information Statement" }}'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- alias: Weather Alert - Announced
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pws_alerts
+      above: 0
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A severe weather alert has been announced for your area. Follow this link for more details https://www.wunderground.com/US/MI/068.html"
+
+- alias: Weather Alert - Lifted
+  trigger:
+    - platform: state
+      entity_id: sensor.pws_alerts
+      from: '1'
+      to: '0'
+    - platform: state
+      entity_id: sensor.pws_alerts
+      from: '2'
+      to: '1'
+  action:
+    - service_template: >
+        {% if states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.household
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek_and_kalee
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.derek_and_nolan
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.kalee_and_nolan
+        {% elif states.sensor.derek.state != 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.derek
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state != 'Extended Away' and states.sensor.nolan.state == 'Extended Away' %} notify.kalee
+        {% elif states.sensor.derek.state == 'Extended Away' and states.sensor.kalee.state == 'Extended Away' and states.sensor.nolan.state != 'Extended Away' %} notify.nolan
+      data:
+        message: >
+          "A severe weather alert has been lifted. Everything is going to be alright."

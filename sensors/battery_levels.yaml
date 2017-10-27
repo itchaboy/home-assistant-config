@@ -1,0 +1,86 @@
+  - platform: template
+    sensors:
+      frontdoorbinarysensor_battery:
+        value_template: '{{ states.zwave.front_door_sensor.attributes.battery_level }}'
+        unit_of_measurement: '%'
+        entity_id: zwave.front_door_sensor
+        friendly_name: Front Door Sensor
+        icon_template: >
+          {% set battery_level = states.zwave.front_door_sensor.attributes.battery_level|default(0)|int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %} mdi:battery
+          {% elif battery_round > 0 %} mdi:battery-{{ battery_round }}
+          {% else %} mdi:battery-alert
+          {% endif %}
+      laundryroommotionsensor_battery:
+        value_template: '{{ states.zwave.laundry_room_motion_sensor.attributes.battery_level }}'
+        unit_of_measurement: '%'
+        entity_id: zwave.laundry_room_motion_sensor
+        friendly_name: Laundry Room Motion Sensor
+        icon_template: >
+          {% set battery_level = states.zwave.laundry_room_motion_sensor.attributes.battery_level|default(0)|int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %} mdi:battery
+          {% elif battery_round > 0 %} mdi:battery-{{ battery_round }}
+          {% else %} mdi:battery-alert
+          {% endif %}
+      bathroommotionsensor_battery:
+        value_template: '{{ states.zwave.bathroom_motion_sensor.attributes.battery_level }}'
+        unit_of_measurement: '%'
+        entity_id: zwave.bathroom_motion_sensor
+        friendly_name: Bathroom Motion Sensor
+        icon_template: >
+          {% set battery_level = states.zwave.bathroom_motion_sensor.attributes.battery_level|default(0)|int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %} mdi:battery
+          {% elif battery_round > 0 %} mdi:battery-{{ battery_round }}
+          {% else %} mdi:battery-alert
+          {% endif %}
+      officewindowsensor_battery:
+        value_template: '{{ states.zwave.office_window_sensor.attributes.battery_level }}'
+        unit_of_measurement: '%'
+        entity_id: zwave.office_window_sensor
+        friendly_name: Office Window Sensor
+        icon_template: >
+          {% set battery_level = states.zwave.office_window_sensor.attributes.battery_level|default(0)|int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %} mdi:battery
+          {% elif battery_round > 0 %} mdi:battery-{{ battery_round }}
+          {% else %} mdi:battery-alert
+          {% endif %}
+      entrance_battery:
+        value_template: '{{ states.sensor.entrance_battery_level.state|int }}'
+        unit_of_measurement: '%'
+        entity_id: sensor.entrance_battery_level
+        friendly_name: Entrance Camera
+        icon_template: >
+          {% set battery_level = states.sensor.entrance_battery_level.state|float|default(0)|int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %} mdi:battery
+          {% elif battery_round > 0 %} mdi:battery-{{ battery_round }}
+          {% else %} mdi:battery-alert
+          {% endif %}
+      kitchen_tablet_batt:
+        value_template: '{{ states.sensor.kitchen_tablet_battery.state }}'
+        unit_of_measurement: '%'
+        entity_id: sensor.kitchen_tablet_battery
+        friendly_name: Kitchen Tablet
+        icon_template: >
+          {% set battery_level = states.sensor.kitchen_tablet_battery.state|default(0)|int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %} mdi:battery
+          {% elif battery_round > 0 %} mdi:battery-{{ battery_round }}
+          {% else %} mdi:battery-alert
+          {% endif %}
+      bathroom_tablet_batt:
+        value_template: '{{ states.sensor.bathroom_tablet_battery.state }}'
+        unit_of_measurement: '%'
+        entity_id: sensor.bathroom_tablet_battery
+        friendly_name: Bathroom Tablet
+        icon_template: >
+          {% set battery_level = states.sensor.bathroom_tablet_battery.state|default(0)|int %}
+          {% set battery_round = (battery_level / 10) |int * 10 %}
+          {% if battery_round >= 100 %} mdi:battery
+          {% elif battery_round > 0 %} mdi:battery-{{ battery_round }}
+          {% else %} mdi:battery-alert
+          {% endif %}

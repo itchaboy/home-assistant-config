@@ -1,0 +1,21 @@
+- alias: 'Hyperion On'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tv_backlight
+      to: 'on'
+  action:
+    - service: light.turn_off
+      entity_id: light.hyperion
+
+- alias: 'Hyperion Off'
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tv_backlight
+      to: 'off'
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.hyperion
+        rgb_color: [0,0,0]

@@ -1,0 +1,50 @@
+- name: No One's Home
+  entities:
+    input_select.lighting_mode:
+      option: Lights Off
+    light.bedroom_lights:
+      state: off
+      transition: 5
+    light.bedroom_lamps:
+      state: off
+      transition: 5
+    light.hall_light:
+      state: off
+      transition: 5
+    light.dining_room_lights:
+      state: off
+      transition: 5
+    light.door_light:
+      state: off
+      transition: 5
+    light.sink_light:
+      state: off
+      transition: 5
+    light.stove_light:
+      state: off
+      transition: 5
+    light.bathroom_light:
+      state: off
+      transition: 5
+    light.bar_light:
+      state: off
+      transition: 5
+    light.living_room_lights:
+      state: off
+      transition: 5
+    light.office_light:
+      state: off
+      transition: 5
+    light.nolans_bedroom_lights:
+      state: off
+      transition: 5
+    light.guest_bathroom_light:
+      state: off
+      transition: 5
+    switch.desk_lamp_switch: off
+    light.kitchen_lights_level: off
+    switch.mirror_lights_switch: off
+    switch.cabinet_lights: off
+    media_player.kitchen_tv: off
+    switch.office_pc: off
+    switch.denon_receiver_power: off

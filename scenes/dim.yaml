@@ -1,0 +1,20 @@
+- name: Dim
+  entities:
+    input_select.lighting_mode:
+      option: Dim
+    light.dining_room_lights:
+      state: on
+      brightness_pct: 40
+      transition: 5
+    light.door_light:
+      state: on
+      brightness_pct: 40
+      transition: 5
+    light.bar_light:
+      state: on
+      brightness_pct: 40
+      transition: 5
+    light.living_room_lights:
+      state: on
+      brightness_pct: 40
+      transition: 5

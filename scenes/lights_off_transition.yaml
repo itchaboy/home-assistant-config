@@ -1,0 +1,18 @@
+- name: Lights Off Transition
+  entities:
+    input_select.lighting_mode:
+      option: Lights Off
+    light.dining_room_lights:
+      state: off
+      transition: 120
+    light.door_light:
+      state: off
+      transition: 120
+    light.bar_light:
+      state: off
+      transition: 120
+    light.living_room_lights:
+      state: off
+      transition: 120
+    switch.tv_backlight: off
+    switch.denon_receiver_power: off

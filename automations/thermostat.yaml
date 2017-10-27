@@ -1,0 +1,189 @@
+- alias: Thermostat - Input Select
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.ecobee_operation_mode
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.thermo_hvac
+      data_template:
+        option: >
+          {% if is_state('sensor.ecobee_operation_mode', 'auto') %} Auto
+          {% elif is_state('sensor.ecobee_operation_mode', 'cool') %} Cool
+          {% elif is_state('sensor.ecobee_operation_mode', 'heat') %} Heat
+          {% elif is_state('sensor.ecobee_operation_mode', 'off') %} Off
+          {% endif %}
+
+- alias: Thermostat - Select Input
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: input_select.thermo_hvac
+  action:
+    - service: climate.set_operation_mode
+      entity_id: climate.thermostat
+      data_template:
+        operation_mode: >
+          {% if is_state('input_select.thermo_hvac', 'Auto') %} auto
+          {% elif is_state('input_select.thermo_hvac', 'Cool') %} cool
+          {% elif is_state('input_select.thermo_hvac', 'Heat') %} heat
+          {% elif is_state('input_select.thermo_hvac', 'Off') %} off
+          {% endif %}
+
+- alias: Thermostat Off - Windows Are Open
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.office_window_sensor_alarm_level
+      to: '255'
+  condition:
+    - condition: state
+      entity_id: climate.thermostat
+      state: 'auto'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.thermo_hvac
+      data:
+        option: 'Off'
+    - service_template: >
+        {% if is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "home") %} notify.household
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.derek_and_kalee
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "home") %} notify.derek_and_nolan
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "home") %} notify.kalee_and_nolan
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.derek
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.kalee
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "home") %} notify.nolan
+        {% endif %}
+      data:
+        message: The windows have been opened, turning off the thermostat.
+
+- alias: Thermostat On - Windows Are Closed
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: sensor.office_window_sensor_alarm_level
+      to: '0'
+  condition:
+    - condition: state
+      entity_id: climate.thermostat
+      state: 'off'
+  action:
+    - service: input_select.select_option
+      entity_id: input_select.thermo_hvac
+      data:
+        option: 'Auto'
+    - service_template: >
+        {% if is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "home") %} notify.household
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.derek_and_kalee
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "home") %} notify.derek_and_nolan
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "home") %} notify.kalee_and_nolan
+        {% elif is_state("device_tracker.dereks_phone", "home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.derek
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "home") and is_state("device_tracker.nolans_phone", "not_home") %} notify.kalee
+        {% elif is_state("device_tracker.dereks_phone", "not_home") and is_state("device_tracker.kalees_phone", "not_home") and is_state("device_tracker.nolans_phone", "home") %} notify.nolan
+        {% endif %}
+      data:
+        message: The windows have been closed, turning the thermostat back to auto.
+
+#- alias: Thermostat - Cooler Outside
+#  initial_state: 'on'
+#  trigger:
+#    - platform: time
+#      minutes: '/5'
+#      seconds: 00
+#  condition:
+#    condition: and
+#    conditions:
+#      - condition: template
+#        value_template: '{{ (states.sensor.bedroom_temperature.state|float + states.sensor.thermostat_temperature.state|float) / 2 - states.sensor.dark_sky_temperature.state|float > 3 }}'
+#      - condition: template
+#        value_template: '{{ states.sensor.dark_sky_wind_speed.state|float > 4 }}'
+#      - condition: state
+#        entity_id: input_select.thermo_hvac
+#        state: 'Auto'
+#      - condition: state
+#        entity_id: group.people
+#        state: 'home'
+#  action:
+#    - service: input_select.select_option
+#      entity_id: input_select.thermo_hvac
+#      data:
+#        option: 'Off'
+#    - service: notify.pushbullet
+#      data_template:
+#        target:
+#          - device/Galaxy S7
+#          - email/nantz.kr@gmail.com
+#          - email/c.nolandooley@gmail.com
+#        message: >
+#          It's cold enough outside to turn off the AC, so open some windows!
+#          It's {{ states('sensor.thermostat_temperature') }} degrees in the house and {{ states('sensor.bedroom_temperature') }} in the bedroom.
+#          Outside it's {{ states('sensor.dark_sky_temperature') }} degrees with {{ states('sensor.lateral_wind_direction') }} wind @ {{ states('sensor.dark_sky_wind_speed') }} mph.
+#    - service: notify.kitchen_tablet
+#      data_template:
+#        message: >
+#          It's cold enough outside to turn off the AC, so open some windows!
+#          It's {{ states('sensor.thermostat_temperature')|round|int }} degrees in the house and {{ states('sensor.bedroom_temperature')|round|int }} in the bedroom.
+#          Outside it's {{ states('sensor.dark_sky_temperature')|round|int }} degrees with {{ states('sensor.lateral_wind_direction') }} wind @ {{ states('sensor.dark_sky_wind_speed')|round|int }} mile per hour.
+#
+#- alias: Thermostat - Back to Auto (Hot)
+#  initial_state: 'on'
+#  trigger:
+#    - platform: numeric_state
+#      entity_id: sensor.indoor_mean_temp
+#      above: 74
+#    - platform: template
+#      value_template: '{{ states.sensor.indoor_mean_temp.state < states.sensor.dark_sky_temperature.state }}'
+#  condition:
+#    - condition: state
+#      entity_id: input_select.thermo_hvac
+#      state: 'Off'
+#  action:
+#    - service: input_select.select_option
+#      entity_id: input_select.thermo_hvac
+#      data:
+#        option: 'Auto'
+#    - service: notify.pushbullet
+#      data_template:
+#        target:
+#          - device/Galaxy S7
+#          - email/nantz.kr@gmail.com
+#          - email/c.nolandooley@gmail.com
+#        message: >
+#          It's getting hot outside, turning the thermostat back to Auto.
+#    - service: notify.kitchen_tablet
+#      data_template:
+#        message: >
+#          It's getting hot outside, turning the thermostat back to Auto
+#
+#- alias: Thermostat - Back to Auto (Cold)
+#  initial_state: 'on'
+#  trigger:
+#    - platform: numeric_state
+#      entity_id: sensor.indoor_mean_temp
+#      below: 66
+#  condition:
+#    condition: and
+#    conditions:
+#      - condition: state
+#        entity_id: input_select.thermo_hvac
+#        state: 'Off'
+#      - condition: numeric_state
+#        entity_id: sensor.dark_sky_daily_high_temperature
+#        below: 66
+#  action:
+#    - service: input_select.select_option
+#      entity_id: input_select.thermo_hvac
+#      data:
+#        option: 'Auto'
+#    - service: notify.pushbullet
+#      data_template:
+#        target:
+#          - device/Galaxy S7
+#          - email/nantz.kr@gmail.com
+#          - email/c.nolandooley@gmail.com
+#        message: >
+#          It's getting cold outside, turning the thermostat back to Auto
+#    - service: notify.kitchen_tablet
+#      data_template:
+#        message: >
+#          It's getting cold outside, turning the thermostat back to Auto

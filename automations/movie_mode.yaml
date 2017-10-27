@@ -1,0 +1,118 @@
+- alias: "Movie resumed triggers movie resumed scene"
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: media_player.amazon_fire_tv
+      from: 'paused'
+      to: 'playing'
+  condition:
+    - condition: state
+      entity_id: input_select.lighting_mode
+      state: 'Movie'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.movie_resumed
+    - delay: '00:00:08'
+    - service: scene.turn_on
+      entity_id: scene.movie_resumed
+
+- alias: "Movie started turn on movie mode"
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: media_player.amazon_fire_tv
+      from: 'idle'
+      to: 'playing'
+  condition:
+    - condition: state
+      entity_id: input_select.lighting_mode
+      state: 'Movie'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.movie
+    - delay: '00:00:08'
+    - service: scene.turn_on
+      entity_id: scene.movie
+
+- alias: "Movie Paused - Lights On"
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: media_player.amazon_fire_tv
+      from: 'playing'
+      to: 'paused'
+  condition:
+    - condition: state
+      entity_id: input_select.lighting_mode
+      state: 'Movie'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.movie_paused
+    - delay: '00:00:08'
+    - service: scene.turn_on
+      entity_id: scene.movie_paused
+
+- alias: "Movie Over - House Lights On"
+  initial_state: 'on'
+  trigger:
+    - platform: state
+      entity_id: media_player.amazon_fire_tv
+      from: 'playing'
+      to: 'idle'
+    - platform: state
+      entity_id: media_player.amazon_fire_tv
+      from: 'paused'
+      to: 'idle'
+    - platform: state
+      entity_id: media_player.amazon_fire_tv
+      to: 'paused'
+      for:
+        minutes: 10
+  condition:
+    - condition: state
+      entity_id: input_select.lighting_mode
+      state: 'Movie'
+  action:
+    - service: scene.turn_on
+      data_template:
+        entity_id: >
+          {% if is_state("input_select.day_period", "Afternoon") %} scene.bright
+          {% elif is_state("input_select.day_period", "Evening") %} scene.medium
+          {% elif is_state("input_select.day_period", "Night") %} scene.dim
+          {% elif is_state("input_select.day_period", "Midnight") %} scene.light_off
+          {% endif %}
+    - service: light.turn_off
+      entity_id: light.hall_light
+      data:
+        transition: 10
+    - delay: '00:00:05'
+    - service: scene.turn_on
+      data_template:
+        entity_id: >
+          {% if is_state("input_select.day_period", "Afternoon") %} scene.bright
+          {% elif is_state("input_select.day_period", "Evening") %} scene.medium
+          {% elif is_state("input_select.day_period", "Night") %} scene.dim
+          {% elif is_state("input_select.day_period", "Midnight") %} scene.light_off
+          {% endif %}
+
+# Auto when kalee is gone
+- alias: Movie mode auto on, derek or nolan is home.
+  trigger:
+    - platform: state
+      entity_id: media_player.amazon_fire_tv
+      to: 'playing'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: group.derek_nolan
+        state: 'home'
+      - condition: state
+        entity_id: device_tracker.kalees_phone
+        state: 'not_home'
+  action:
+    - service: scene.turn_on
+      entity_id: scene.movie
+    - delay: '00:00:08'
+    - service: scene.turn_on
+      entity_id: scene.movie
